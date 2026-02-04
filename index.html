@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Electromagnetics Study Hub</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css.css">
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>E&M</h1>
+            <p class="subtitle">🧲👍</p>
+        </header>
+
+        <div class="nav-tabs">
+            <button class="tab-btn active" onclick="switchTab('study')">Notes</button>
+            <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
+            <button class="tab-btn" onclick="switchTab('comprehensive')">Test</button>
+        </div>
+
+        <div id="study-section" class="content-section active">
+            <div class="chapter-grid" id="chapter-grid"></div>
+        </div>
+
+        <div id="quiz-section" class="content-section">
+            <div class="study-mode-selector">
+                <div class="mode-card" onclick="startQuiz('targeted')">
+                    <h3>Chapter Practice</h3>
+                </div>
+                <div class="mode-card" onclick="startQuiz('random')">
+                    <h3>Mixed Practice</h3>
+                </div>
+            </div>
+            <div class="quiz-container" id="quiz-container"></div>
+        </div>
+
+        <div id="comprehensive-section" class="content-section">
+            <div class="quiz-container">
+                <div class="quiz-header">
+                    <h2>Comprehensive Exam</h2>
+                    <button class="btn btn-primary" onclick="startComprehensiveTest()" style="margin-top: 2rem;">Begin Test</button>
+                </div>
+                <div id="comprehensive-quiz-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <button class="close-modal" onclick="closeModal()">&times;</button>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
