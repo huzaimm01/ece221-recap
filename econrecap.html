@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Economics Review</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #153243;
+            --accent: #FBFEF9;
+            --glass: rgba(251, 254, 249, 0.05);
+            --border: rgba(251, 254, 249, 0.15);
+            --transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--accent);
+            font-family: 'Lexend', sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Architecture */
+        nav {
+            width: 300px;
+            background: rgba(0, 0, 0, 0.2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 40px 20px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .nav-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            letter-spacing: -1px;
+        }
+
+        .nav-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.4;
+            margin: 25px 0 10px 5px;
+        }
+
+        .nav-item {
+            padding: 12px 15px;
+            font-size: 0.85rem;
+            font-weight: 300;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0.6;
+            margin-bottom: 4px;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            opacity: 1;
+            background: var(--glass);
+        }
+
+        /* Content Display */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 80px 10%;
+            scroll-behavior: smooth;
+        }
+
+        .content-section {
+            display: none;
+            max-width: 800px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active { display: block; }
+
+        h1 { font-size: 3rem; font-weight: 600; margin: 0 0 30px 0; letter-spacing: -2px; }
+        h2 { font-size: 1.6rem; font-weight: 500; margin: 60px 0 20px 0; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        
+        p { font-size: 1rem; line-height: 1.9; font-weight: 300; opacity: 0.8; margin-bottom: 25px; }
+
+        .formula-box {
+            background: var(--glass);
+            border-left: 3px solid var(--accent);
+            padding: 30px;
+            margin: 30px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            border-radius: 2px;
+        }
+
+        .note {
+            background: rgba(251, 254, 249, 0.03);
+            border: 1px solid var(--border);
+            padding: 20px;
+            margin: 20px 0;
+            font-style: italic;
+            font-weight: 300;
+        }
+
+        /* Quiz UI */
+        .quiz-container {
+            background: var(--glass);
+            padding: 40px;
+            border: 1px solid var(--border);
+        }
+
+        .q-meta { font-size: 0.7rem; opacity: 0.5; letter-spacing: 2px; margin-bottom: 10px; }
+        
+        .opt-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--accent);
+            text-align: left;
+            margin-bottom: 15px;
+            cursor: pointer;
+            font-family: 'Lexend';
+            transition: var(--transition);
+        }
+
+        .opt-btn:hover { background: rgba(251, 254, 249, 0.1); border-color: var(--accent); }
+        .opt-btn.correct { background: #2e7d32; border-color: #2e7d32; }
+        .opt-btn.wrong { background: #c62828; border-color: #c62828; }
+
+        @media (max-width: 800px) {
+            body { flex-direction: column; }
+            nav { width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); padding: 20px; flex-direction: row; overflow-x: auto; }
+            .nav-title, .nav-label { display: none; }
+            .nav-item { white-space: nowrap; margin-right: 10px; }
+            main { padding: 40px 20px; }
+        }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-title">2EE3 Recap</div>
+    
+    <div class="nav-label">Week 1-4</div>
+    <div class="nav-item active" onclick="show('foundations')">Foundations & CFD</div>
+    <div class="nav-item" onclick="show('tvm')">Interest & Equivalence</div>
+    <div class="nav-item" onclick="show('gradients')">Gradient Series</div>
+
+    <div class="nav-label">Week 5-7</div>
+    <div class="nav-item" onclick="show('methods')">Comparison Methods</div>
+    <div class="nav-item" onclick="show('irr')">IRR & Incremental</div>
+    <div class="nav-item" onclick="show('sensitivity')">Sensitivity Analysis</div>
+
+    <div class="nav-label">Week 8-11</div>
+    <div class="nav-item" onclick="show('accounting')">CCA & Tax Shield</div>
+    <div class="nav-item" onclick="show('replacement')">Replacement Analysis</div>
+    <div class="nav-item" onclick="show('inflation')">Inflation Models</div>
+
+    <div class="nav-label">Audit</div>
+    <div class="nav-item" onclick="show('quiz')" style="color:#a8ff9c; opacity:1;">30-Question Audit</div>
+</nav>
+
+<main id="main-view">
+    <section id="foundations" class="content-section active">
+        <h1>Foundations & CFD</h1>
+        <p>I need to remember that engineering economics isn't just about math; it's about decision-making. I have to map every problem onto a Cash Flow Diagram (CFD) first. Upward arrows are positive receipts; downward arrows are disbursements.</p>
+        
+        
+        
+        <h2>The Equivalence Concept</h2>
+        <p>Money has different values at different times. $100 today is not equal to $100 in 5 years. I use the interest rate (i) to move money through time. This is the 'Time Value of Money' (TVM).</p>
+        <div class="note">If I can't draw the CFD, I can't solve the problem. Always label n, i, P, and F.</div>
+    </section>
+
+    <section id="tvm" class="content-section">
+        <h1>Interest & Equivalence</h1>
+        <p>This is where I move P to F or F to P. I'm strictly using compound interest here. Nominal rates are 'r', but I need effective rates 'ia' if compounding is more than annual.</p>
+        
+        <div class="formula-box">
+            Single Payment (F/P): F = P(1 + i)^n <br>
+            Present Value (P/F): P = F(1 + i)^-n <br>
+            Annuity (P/A): P = A * [((1+i)^n - 1) / (i(1+i)^n)]
+        </div>
+
+        <h2>Effective vs Nominal</h2>
+        <p>If interest is 12% compounded monthly, r = 0.12 and m = 12. The periodic rate is 1%. The effective annual rate is higher.</p>
+        <div class="formula-box">
+            ia = (1 + r/m)^m - 1
+        </div>
+    </section>
+
+    <section id="gradients" class="content-section">
+        <h1>Gradient Series</h1>
+        <p>I have two types of gradients for costs that change over time: Arithmetic and Geometric.</p>
+        
+        <h2>Arithmetic Gradient (G)</h2>
+        <p>This is a linear increase. Year 1: $100, Year 2: $150, Year 3: $200. Here, G = $50. The total Present Worth is the base annuity (the $100) PLUS the gradient component.</p>
+        
+        <h2>Geometric Gradient (g)</h2>
+        <p>This is a percentage increase (e.g., maintenance grows by 5% every year). I have to be careful if i = g because the formula changes.</p>
+        <div class="formula-box">
+            If i != g: P = A1 * [1 - (1+g)^n * (1+i)^-n] / (i - g)
+        </div>
+    </section>
+
+    <section id="methods" class="content-section">
+        <h1>Comparison Methods</h1>
+        <p>I use Present Worth (PW) and Annual Worth (AW) to decide between projects.</p>
+        
+        <h2>The PW Rule</h2>
+        <p>If I have two projects with <strong>different lives</strong> (e.g., 3 years and 4 years), I cannot compare them directly via PW. I must use the Least Common Multiple (LCM), which in this case is 12 years. I assume both projects are repeated until they hit 12 years.</p>
+        
+        <h2>The AW Rule</h2>
+        <p>AW is easier for unequal lives. I don't need the LCM. I just find the AW for one life cycle, and that value remains the same regardless of how many times the project is repeated.</p>
+    </section>
+
+    <section id="irr" class="content-section">
+        <h1>IRR & Incremental Analysis</h1>
+        <p>The Internal Rate of Return (IRR) is the 'i' that makes the PW = 0. I cannot simply pick the project with the highest IRR. That's a trap.</p>
+        
+        <h2>The Incremental Method</h2>
+        <p>1. Rank projects by initial cost.<br>
+           2. Look at the difference (Project B - Project A).<br>
+           3. Find the ΔIRR of that difference. <br>
+           4. If ΔIRR > MARR, I pick the more expensive one (B). If not, I stick with A.</p>
+    </section>
+
+    <section id="cca" class="content-section">
+        <h1>CCA & Depreciation</h1>
+        <p>This is Canada-specific tax logic. I use the Capital Cost Allowance (CCA) to calculate the 'Tax Shield'.</p>
+        
+        <h2>The Half-Year Rule</h2>
+        <p>In the first year I buy something, I can only claim 50% of the cost for depreciation. This is a massive point-sink in the midterm if I forget it.</p>
+        <div class="formula-box">
+            Year 1 CCA = (Cost * 0.5) * d <br>
+            Year 2 CCA = (Cost - Year 1 CCA) * d
+        </div>
+    </section>
+
+    <section id="replacement" class="content-section">
+        <h1>Replacement Analysis</h1>
+        <p>Defender (what I have) vs. Challenger (what I want). I ignore sunk costs (what I paid for the Defender years ago). I only care about what it's worth <strong>now</strong> (Salvage Value).</p>
+        
+        <h2>Marginal Cost Logic</h2>
+        <p>I keep the Defender as long as its Marginal Cost for <em>next year</em> is less than the Minimum Annual Worth (Min AW) of the Challenger. Once the Defender's cost for one more year exceeds the Challenger's best average cost, I swap them.</p>
+    </section>
+
+    <section id="inflation" class="content-section">
+        <h1>Inflation Models</h1>
+        <p>I have Actual Dollars (what the bank sees) and Constant Dollars (what the money can actually buy). I need to map the interest rate to the dollar type.</p>
+        <div class="formula-box">
+            Actual Dollars -> Market Interest Rate (i) <br>
+            Constant Dollars -> Real Interest Rate (i') <br><br>
+            Formula: (1 + i) = (1 + i')(1 + f)
+        </div>
+    </section>
+
+    <section id="quiz" class="content-section">
+        <h1>30-Question Audit</h1>
+        <div id="quiz-ui" class="quiz-container">
+            <div id="q-meta" class="q-meta">QUESTION 1 OF 30</div>
+            <h2 id="q-text" style="margin-top:0;"></h2>
+            <div id="q-options"></div>
+        </div>
+    </section>
+</main>
+
+<script>
+    function show(id) {
+        document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-item').forEach(l => l.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        const activeLink = Array.from(document.querySelectorAll('.nav-item')).find(l => l.getAttribute('onclick').includes(id));
+        if(activeLink) activeLink.classList.add('active');
+        document.getElementById('main-view').scrollTop = 0;
+    }
+
+    const quizData = [
+        { q: "If interest is 12% compounded monthly, what is the periodic rate?", o: ["12%", "6%", "1%", "0.1%"], c: 2 },
+        { q: "Using PW to compare a 3-year and 5-year project, what is the LCM?", o: ["8 years", "15 years", "5 years", "3 years"], c: 1 },
+        { q: "Does the AW method require an LCM for unequal lives?", o: ["Yes", "No"], c: 1 },
+        { q: "In the Half-Year Rule for CCA, how much cost is used in Year 1?", o: ["100%", "0%", "50%", "25%"], c: 2 },
+        { q: "What is the 'Defender' in replacement analysis?", o: ["New asset", "Existing asset", "The bank", "The salvage value"], c: 1 },
+        { q: "If i=10% and f=4%, what is the real interest rate i'?", o: ["14%", "6%", "5.77%", "10%"], c: 2 },
+        { q: "Which rate is used with Actual Dollars?", o: ["Real rate", "Market rate", "Inflation rate", "Periodic rate"], c: 1 },
+        { q: "An arithmetic gradient G increases the cash flow by what?", o: ["Fixed %", "Fixed $ amount", "Random amount", "Zero"], c: 1 },
+        { q: "If PW = 0, what is the interest rate equal to?", o: ["MARR", "IRR", "Inflation", "Nominal"], c: 1 },
+        { q: "For a single project, when is it viable?", o: ["PW < 0", "PW > 0", "PW = Initial Cost", "IRR < MARR"], c: 1 },
+        { q: "Sunk costs are included in replacement analysis.", o: ["True", "False"], c: 1 },
+        { q: "What does MARR stand for?", o: ["Max Annual Rate", "Min Acceptable Rate of Return", "Market Annual Return", "Marginal Annual Rate"], c: 1 },
+        { q: "Incremental analysis (B-A) is used for what?", o: ["Single projects", "Mutually exclusive projects", "Tax calculation", "Inflation"], c: 1 },
+        { q: "Capital Recovery (CR) includes which two things?", o: ["P and F", "P and Salvage", "Revenue and Tax", "G and g"], c: 1 },
+        { q: "Which method is best for projects with unequal lives?", o: ["PW", "AW", "IRR", "Payback"], c: 1 },
+        { q: "A geometric gradient increases by what?", o: ["Fixed $", "Fixed %", "Yearly sum", "None"], c: 1 },
+        { q: "If ΔIRR > MARR, which project do I pick?", o: ["Lower cost", "Higher cost", "Neither", "Both"], c: 1 },
+        { q: "What is UCC?", o: ["Unused Capital Cost", "Undepreciated Capital Cost", "Uniform Capital Charge", "None"], c: 1 },
+        { q: "CCA is a non-cash expense.", o: ["True", "False"], c: 0 },
+        { q: "If i = g in a geometric gradient, the formula changes.", o: ["True", "False"], c: 0 },
+        { q: "Salvage value is a cash inflow.", o: ["True", "False"], c: 0 },
+        { q: "Market interest rate includes inflation.", o: ["True", "False"], c: 0 },
+        { q: "Payback period accounts for TVM.", o: ["True", "False (usually)", "Always", "None"], c: 1 },
+        { q: "Sensitivity analysis checks how variables affect the outcome.", o: ["True", "False"], c: 0 },
+        { q: "Break-even is where PW equals what?", o: ["Initial Cost", "Zero", "Salvage", "MARR"], c: 1 },
+        { q: "A 5% increase every year is which gradient?", o: ["Arithmetic", "Geometric", "Linear", "Fixed"], c: 1 },
+        { q: "Effective rate is always >= Nominal rate if m >= 1.", o: ["True", "False"], c: 0 },
+        { q: "n represents the number of what?", o: ["Years", "Months", "Compounding periods", "People"], c: 2 },
+        { q: "Taxable income is Revenue - Expenses - what?", o: ["P", "CCA", "Salvage", "Tax Rate"], c: 1 },
+        { q: "The goal of 2EE3 is to find the most economic choice.", o: ["True", "False"], c: 0 }
+    ];
+
+    let currentQ = 0;
+
+    function renderQuiz() {
+        const d = quizData[currentQ];
+        document.getElementById('q-meta').innerText = `QUESTION ${currentQ + 1} OF ${quizData.length}`;
+        document.getElementById('q-text').innerText = d.q;
+        const container = document.getElementById('q-options');
+        container.innerHTML = '';
+        
+        d.o.forEach((opt, i) => {
+            const b = document.createElement('button');
+            b.className = 'opt-btn';
+            b.innerText = opt;
+            b.onclick = () => {
+                const btns = document.querySelectorAll('.opt-btn');
+                btns.forEach(btn => btn.style.pointerEvents = 'none');
+                if(i === d.c) b.classList.add('correct');
+                else {
+                    b.classList.add('wrong');
+                    btns[d.c].classList.add('correct');
+                }
+                setTimeout(() => {
+                    currentQ++;
+                    if(currentQ < quizData.length) renderQuiz();
+                    else {
+                        document.getElementById('quiz-ui').innerHTML = "<h2>Audit Complete.</h2><p>I've run through the 30 core points. Ready for the exam.</p>";
+                    }
+                }, 1200);
+            };
+            container.appendChild(b);
+        });
+    }
+
+    renderQuiz();
+</script>
+
+</body>
+</html>
