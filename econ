@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Engineering Economics Study Hub</title>
+    <title>Econ Review</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -630,7 +630,7 @@
         <button class="tab-btn active" onclick="switchTab('study')">Study Material</button>
         <button class="tab-btn" onclick="switchTab('quiz')">Practice Quiz</button>
         <button class="tab-btn" onclick="switchTab('calculators')">Calculators</button>
-        <button class="tab-btn" onclick="switchTab('comprehensive')">Final Exam Prep</button>
+        <button class="tab-btn" onclick="switchTab('comprehensive')">Exam</button>
     </div>
 
     <div id="study-section" class="content-section active">
@@ -641,11 +641,11 @@
         <div class="study-mode-selector">
             <div class="mode-card" onclick="startQuiz('targeted')">
                 <h3>Topic Practice</h3>
-                <p>Focus on specific topics and master one concept at a time</p>
+                <p>Focus on specific topics </p>
             </div>
             <div class="mode-card" onclick="startQuiz('random')">
                 <h3>Mixed Practice</h3>
-                <p>Random questions from all topics to test overall understanding</p>
+                <p>Random questions </p>
             </div>
         </div>
         <div class="quiz-container" id="quiz-container"></div>
