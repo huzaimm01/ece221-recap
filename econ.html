@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GENTECH 2EE3 | Internal Recap</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@200;300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #153243;
+            --accent: #FBFEF9;
+            --glass: rgba(251, 254, 249, 0.04);
+            --border: rgba(251, 254, 249, 0.12);
+            --transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--accent);
+            font-family: 'Lexend', sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar: High Density */
+        nav {
+            width: 320px;
+            background: rgba(0, 0, 0, 0.2);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            padding: 40px 15px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .nav-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 40px;
+            padding-left: 10px;
+            letter-spacing: -1px;
+        }
+
+        .nav-group-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.4;
+            margin: 25px 0 10px 10px;
+        }
+
+        .nav-link {
+            padding: 10px 15px;
+            font-size: 0.8rem;
+            font-weight: 300;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: var(--transition);
+            opacity: 0.5;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            opacity: 1;
+            background: var(--glass);
+            padding-left: 20px;
+        }
+
+        /* Responsive Content Area */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 80px 10%;
+            scroll-behavior: smooth;
+        }
+
+        .section {
+            display: none;
+            max-width: 850px;
+            margin: 0 auto;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .section.active { display: block; }
+
+        /* Document Styling */
+        h1 { font-size: 3rem; font-weight: 600; margin: 0 0 40px 0; letter-spacing: -2px; }
+        h2 { font-size: 1.6rem; font-weight: 500; margin: 60px 0 25px 0; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        h3 { font-size: 1.1rem; font-weight: 500; margin: 35px 0 15px 0; }
+        
+        p { font-size: 1rem; line-height: 1.8; font-weight: 300; opacity: 0.75; margin-bottom: 25px; }
+
+        .formula-card {
+            background: var(--glass);
+            border-left: 3px solid var(--accent);
+            padding: 30px;
+            margin: 30px 0;
+            font-family: monospace;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            border-radius: 2px;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+        }
+
+        .data-table td, .data-table th {
+            padding: 15px;
+            border: 1px solid var(--border);
+            font-size: 0.9rem;
+            font-weight: 300;
+        }
+
+        .data-table th { font-weight: 500; background: rgba(251, 254, 249, 0.05); }
+
+        /* Quiz Engine */
+        #quiz-ui {
+            background: var(--glass);
+            padding: 40px;
+            border: 1px solid var(--border);
+        }
+
+        .opt-btn {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            color: var(--accent);
+            text-align: left;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-family: 'Lexend';
+            transition: var(--transition);
+        }
+
+        .opt-btn:hover { background: rgba(251, 254, 249, 0.08); border-color: var(--accent); }
+        .opt-btn.correct { background: #2e7d32; border-color: #2e7d32; }
+        .opt-btn.wrong { background: #c62828; border-color: #c62828; }
+
+        @media (max-width: 900px) {
+            body { flex-direction: column; }
+            nav {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                padding: 15px;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+            }
+            .nav-title, .nav-group-label { display: none; }
+            main { padding: 40px 20px; }
+            h1 { font-size: 2.2rem; }
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="nav-title">2EE3 Recap</div>
+    
+    <div class="nav-group-label">Foundations</div>
+    <div class="nav-link active" onclick="showTab('tvm')">Time Value Logic</div>
+    <div class="nav-link" onclick="tab('formulas')">Interest Formulas</div>
+    <div class="nav-link" onclick="tab('gradients')">Gradient Series</div>
+
+    <div class="nav-group-label">Comparison Models</div>
+    <div class="nav-link" onclick="tab('pw')">Present Worth (PW)</div>
+    <div class="nav-link" onclick="tab('aw')">Annual Worth (AW)</div>
+    <div class="nav-link" onclick="tab('irr')">IRR & Incremental</div>
+
+    <div class="nav-group-label">Fiscal Analysis</div>
+    <div class="nav-link" onclick="tab('cca')">CCA & Depreciation</div>
+    <div class="nav-link" onclick="tab('tax')">After-Tax Flows</div>
+
+    <div class="nav-group-label">Final Topics</div>
+    <div class="nav-link" onclick="tab('replace')">Replacement Logic</div>
+    <div class="nav-link" onclick="tab('inflation')">Inflation Models</div>
+    
+    <div class="nav-group-label">Examination</div>
+    <div class="nav-link" onclick="tab('quiz')" style="color:#a8ff9c; opacity:1;">Master Quiz</div>
+</nav>
+
+<main id="scroll-target">
+    <section id="tvm" class="section active">
+        <h1>Time Value Logic</h1>
+        <p>I have to start with the Equivalence Principle: different sums of money at different times can be economically equal. I use Cash Flow Diagrams (CFD) to map these. Arrows up = Inflow (Salvage, Revenue). Arrows down = Outflow (Initial Cost, O&M).</p>
+        
+        <h2>The Compounding Effect</h2>
+        <p>In this course, I never use simple interest. Everything is compound. If a period isn't specified, I assume annual.</p>
+        
+        <div class="formula-card">
+            Future Value (F): F = P(1 + i)^n<br>
+            Present Value (P): P = F(1 + i)^-n
+        </div>
+    </section>
+
+    <section id="formulas" class="section">
+        <h1>Interest Formulas</h1>
+        <p>I use these factors to move money across the CFD. I need to be careful with 'n'—it's the number of compounding periods, not necessarily years.</p>
+        
+        <h3>Uniform Series (Annuities)</h3>
+        <p>When I have a series of equal payments <em>A</em> over <em>n</em> periods:</p>
+        <div class="formula-card">
+            (P/A, i, n) = [(1+i)^n - 1] / [i(1+i)^n]<br>
+            (A/P, i, n) = [i(1+i)^n] / [(1+i)^n - 1]
+        </div>
+
+        <h3>Effective Interest</h3>
+        <p>If interest is "12% compounded monthly," the nominal rate <em>r</em> is 12%, but the effective rate <em>ia</em> is higher because of compounding.</p>
+        <div class="formula-card">
+            ia = (1 + r/m)^m - 1
+        </div>
+    </section>
+
+    <section id="gradients" class="section">
+        <h1>Gradient Series</h1>
+        <p>Most costs in engineering increase as equipment ages. I categorize these into Arithmetic and Geometric.</p>
+        
+        <h2>Arithmetic Gradient (G)</h2>
+        <p>The cash flow increases by a constant <strong>dollar amount</strong> each year (e.g., $100, $200, $300...). The total Present Worth is the base annuity <em>P_A</em> plus the gradient <em>P_G</em>.</p>
+        
+        <h2>Geometric Gradient (g)</h2>
+        <p>The flow grows by a constant <strong>percentage</strong> (e.g., 5% more each year). I have to check if the interest rate <em>i</em> equals the growth rate <em>g</em>.</p>
+        <div class="formula-card">
+            If i != g: P = A1[1 - (1+g)^n(1+i)^-n] / (i - g)
+        </div>
+    </section>
+
+    <section id="pw" class="section">
+        <h1>Present Worth (PW)</h1>
+        <p>I use PW to discount everything back to t=0. If I'm comparing projects with unequal lives, I <strong>must</strong> use the Least Common Multiple (LCM) of their lives to create a fair comparison period.</p>
+        
+        <div class="note-box">
+            <strong>Decision Rule:</strong> In a mutually exclusive set, I pick the project with the highest PW (provided PW >= 0).
+        </div>
+    </section>
+
+    <section id="aw" class="section">
+        <h1>Annual Worth (AW)</h1>
+        <p>This is usually my go-to for comparing projects with different lifespans because I don't need the LCM. AW assumes the project repeats indefinitely.</p>
+        <div class="formula-card">
+            AW = (Revenues - Expenses) - Capital Recovery (CR)
+        </div>
+        <p>Capital Recovery (CR) accounts for the loss in value of the asset over time plus interest on the tied-up capital.</p>
+    </section>
+
+    <section id="irr" class="section">
+        <h1>IRR & Incremental Analysis</h1>
+        <p>Internal Rate of Return is the rate where PW = 0. I cannot just pick the highest IRR; that's a common trap. I have to perform Incremental Analysis.</p>
+        
+        <h3>The Steps</h3>
+        <p>1. Rank projects by initial investment.<br>
+           2. Calculate the difference in cash flows (Δ Cash Flow).<br>
+           3. Solve for ΔIRR. If ΔIRR > MARR, I choose the more expensive project.</p>
+    </section>
+
+    <section id="cca" class="section">
+        <h1>CCA & Depreciation</h1>
+        <p>Capital Cost Allowance (CCA) is the tax-allowable depreciation in Canada. It reduces my taxable income, which creates a "Tax Shield."</p>
+        
+        <h2>The Half-Year Rule</h2>
+        <p>In the first year of ownership, I can only claim 50% of the asset's cost for CCA. I need to remember to subtract the CCA from the UCC (Undepreciated Capital Cost) to find the base for the next year.</p>
+    </section>
+
+    <section id="tax" class="section">
+        <h1>After-Tax Flows</h1>
+        <p>I have to account for income tax to find the true viability of a project. BTCF is Before-Tax Cash Flow; ATCF is After-Tax.</p>
+        <div class="formula-card">
+            Taxable Income = BTCF - CCA<br>
+            Income Tax = Taxable Income * (Tax Rate)<br>
+            ATCF = BTCF - Income Tax
+        </div>
+    </section>
+
+    <section id="replace" class="section">
+        <h1>Replacement Logic</h1>
+        <p>I compare my current asset (Defender) to a potential new one (Challenger). I ignore "sunk costs" (what I originally paid for the Defender).</p>
+        
+        <h3>Economic Service Life (ESL)</h3>
+        <p>The ESL is the number of years that minimizes the total AW of costs. I replace the Defender if its Marginal Cost for <em>next year</em> is higher than the minimum AW of the Challenger.</p>
+    </section>
+
+    <section id="inflation" class="section">
+        <h1>Inflation Models</h1>
+        <p>I have to handle two types of dollars: Actual (inflated) and Constant (purchasing power). I use the Market Interest Rate (i) for Actual dollars and the Real Interest Rate (i') for Constant dollars.</p>
+        <div class="formula-card">
+            (1 + i) = (1 + i')(1 + f)<br>
+            where f = inflation rate.
+        </div>
+    </section>
+
+    <section id="quiz" class="section">
+        <h1>Knowledge Audit</h1>
+        <div id="quiz-ui">
+            <div id="q-stats" style="font-size:0.7rem; opacity:0.5; margin-bottom:10px;">QUESTION 1 OF 10</div>
+            <h2 id="q-text" style="margin-top:0;"></h2>
+            <div id="q-options"></div>
+        </div>
+    </section>
+</main>
+
+<script>
+    function tab(id) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        const activeLink = Array.from(document.querySelectorAll('.nav-link')).find(l => l.getAttribute('onclick').includes(id));
+        if(activeLink) activeLink.classList.add('active');
+        document.getElementById('scroll-target').scrollTop = 0;
+    }
+
+    const quizData = [
+        { q: "I have two projects with lives of 3 and 4 years. If I'm using Present Worth, what is the study period?", o: ["3 years", "4 years", "7 years", "12 years"], c: 3 },
+        { q: "Does the Annual Worth method require an LCM for unequal lives?", o: ["Yes", "No", "Only for the Defender", "Only if i > 10%"], c: 1 },
+        { q: "What rate do I use for Constant Dollars when inflation is present?", o: ["Market Rate", "Real Rate", "Nominal Rate", "Zero"], c: 1 },
+        { q: "In Canada's CCA system, how much of a new asset's cost is depreciated in Year 1?", o: ["100%", "50% of the cost * rate", "0%", "25%"], c: 1 },
+        { q: "If I find the ΔIRR of (B-A) is 14% and my MARR is 10%, which project do I select?", o: ["Project A", "Project B", "Both", "Reject both"], c: 1 },
+        { q: "What is a 'Sunk Cost' in replacement analysis?", o: ["Current Salvage Value", "The original purchase price", "Next year's O&M", "The cost of the Challenger"], c: 1 },
+        { q: "Which formula moves a future sum 5 years back to the present?", o: ["(A/P, i, 5)", "(P/F, i, 5)", "(F/P, i, 5)", "(P/A, i, 5)"], c: 1 },
+        { q: "If interest is 12% compounded quarterly, what is the interest per period?", o: ["12%", "4%", "3%", "1%"], c: 2 },
+        { q: "An arithmetic gradient G increases the cash flow by what?", o: ["A fixed percentage", "A fixed dollar amount", "A random amount", "Nothing"], c: 1 },
+        { q: "When do I replace the Defender?", o: ["When it hits 10 years", "When Marginal Cost > Challenger's Min AW", "When it breaks", "Never"], c: 1 }
+    ];
+
+    let currentIdx = 0;
+
+    function renderQuestion() {
+        const d = quizData[currentIdx];
+        document.getElementById('q-stats').innerText = `QUESTION ${currentIdx + 1} OF ${quizData.length}`;
+        document.getElementById('q-text').innerText = d.q;
+        const container = document.getElementById('q-options');
+        container.innerHTML = '';
+        d.o.forEach((opt, i) => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt;
+            btn.onclick = () => {
+                const btns = document.querySelectorAll('.opt-btn');
+                btns.forEach(b => b.style.pointerEvents = 'none');
+                if(i === d.c) btn.classList.add('correct');
+                else { btn.classList.add('wrong'); btns[d.c].classList.add('correct'); }
+                setTimeout(() => {
+                    currentIdx++;
+                    if(currentIdx < quizData.length) renderQuestion();
+                    else document.getElementById('quiz-ui').innerHTML = "<h2>Audit Complete.</h2><p>I've covered the core syllabus. Time to verify the math on the practice sets.</p>";
+                }, 1200);
+            };
+            container.appendChild(btn);
+        });
+    }
+
+    renderQuestion();
+</script>
+
+</body>
+</html>
