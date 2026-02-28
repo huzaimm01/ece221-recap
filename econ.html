@@ -1,0 +1,4171 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Econ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+```
+    body {
+        font-family: 'Lexend', sans-serif;
+        background: #153243;
+        color: #FBFEF9;
+        line-height: 1.6;
+        overflow-x: hidden;
+    }
+
+    .container {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    header {
+        text-align: center;
+        padding: 3rem 0;
+        position: relative;
+    }
+
+    h1 {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 0.5rem;
+        background: linear-gradient(135deg, #FBFEF9 0%, #a8b5c0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: fadeInDown 0.8s ease;
+    }
+
+    .subtitle {
+        font-size: 1.1rem;
+        opacity: 0.8;
+        font-weight: 300;
+        animation: fadeInUp 0.8s ease 0.2s both;
+    }
+
+    .nav-tabs {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+        animation: fadeIn 1s ease 0.4s both;
+    }
+
+    .tab-btn {
+        background: rgba(251, 254, 249, 0.05);
+        border: 2px solid rgba(251, 254, 249, 0.1);
+        color: #FBFEF9;
+        padding: 0.8rem 1.8rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-family: 'Lexend', sans-serif;
+        font-size: 0.95rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .tab-btn:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(251, 254, 249, 0.1), transparent);
+        transition: left 0.5s ease;
+    }
+
+    .tab-btn:hover:before {
+        left: 100%;
+    }
+
+    .tab-btn:hover {
+        background: rgba(251, 254, 249, 0.1);
+        border-color: rgba(251, 254, 249, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .tab-btn.active {
+        background: #FBFEF9;
+        color: #153243;
+        border-color: #FBFEF9;
+    }
+
+    .content-section {
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .content-section.active {
+        display: block;
+    }
+
+    .topic-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+        margin-top: 2rem;
+    }
+
+    .topic-card {
+        background: rgba(251, 254, 249, 0.03);
+        border: 1px solid rgba(251, 254, 249, 0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        cursor: pointer;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .topic-card:before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #FBFEF9, transparent);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.4s ease;
+    }
+
+    .topic-card:hover {
+        background: rgba(251, 254, 249, 0.07);
+        border-color: rgba(251, 254, 249, 0.3);
+        transform: translateY(-4px);
+    }
+
+    .topic-card:hover:before {
+        transform: scaleX(1);
+    }
+
+    .topic-number {
+        font-size: 0.85rem;
+        opacity: 0.6;
+        font-weight: 500;
+        margin-bottom: 0.5rem;
+    }
+
+    .topic-title {
+        font-size: 1.4rem;
+        font-weight: 600;
+        margin-bottom: 1rem;
+    }
+
+    .topic-topics {
+        font-size: 0.9rem;
+        opacity: 0.7;
+        line-height: 1.8;
+    }
+
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(21, 50, 67, 0.95);
+        z-index: 1000;
+        overflow-y: auto;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal.active {
+        display: block;
+    }
+
+    .modal-content {
+        max-width: 900px;
+        margin: 2rem auto;
+        background: #153243;
+        border: 1px solid rgba(251, 254, 249, 0.2);
+        border-radius: 20px;
+        padding: 3rem;
+        position: relative;
+        animation: slideUp 0.4s ease;
+    }
+
+    .close-modal {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        background: none;
+        border: none;
+        color: #FBFEF9;
+        font-size: 2rem;
+        cursor: pointer;
+        opacity: 0.6;
+        transition: opacity 0.3s ease;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .close-modal:hover {
+        opacity: 1;
+    }
+
+    .slide-content {
+        margin-bottom: 2rem;
+    }
+
+    .slide-content h2 {
+        font-size: 2rem;
+        margin-bottom: 1.5rem;
+        color: #FBFEF9;
+    }
+
+    .slide-content h3 {
+        font-size: 1.3rem;
+        margin: 1.5rem 0 0.8rem 0;
+        opacity: 0.9;
+    }
+
+    .slide-content p, .slide-content li {
+        margin-bottom: 0.8rem;
+        opacity: 0.85;
+    }
+
+    .slide-content ul {
+        margin-left: 1.5rem;
+    }
+
+    .formula {
+        background: rgba(251, 254, 249, 0.05);
+        border-left: 3px solid #FBFEF9;
+        padding: 1rem 1.5rem;
+        margin: 1rem 0;
+        border-radius: 8px;
+        font-family: 'Courier New', monospace;
+        overflow-x: auto;
+    }
+
+    .quiz-container {
+        max-width: 800px;
+        margin: 2rem auto;
+    }
+
+    .quiz-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .quiz-header h2 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    .progress-bar {
+        width: 100%;
+        height: 8px;
+        background: rgba(251, 254, 249, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 2rem;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #FBFEF9, #a8b5c0);
+        width: 0%;
+        transition: width 0.5s ease;
+    }
+
+    .question-card {
+        background: rgba(251, 254, 249, 0.03);
+        border: 1px solid rgba(251, 254, 249, 0.1);
+        border-radius: 16px;
+        padding: 2.5rem;
+        margin-bottom: 2rem;
+        animation: slideUp 0.4s ease;
+    }
+
+    .question-text {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        line-height: 1.8;
+    }
+
+    .options {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .option {
+        background: rgba(251, 254, 249, 0.05);
+        border: 2px solid rgba(251, 254, 249, 0.1);
+        padding: 1.2rem 1.5rem;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .option:hover {
+        background: rgba(251, 254, 249, 0.08);
+        border-color: rgba(251, 254, 249, 0.3);
+        transform: translateX(4px);
+    }
+
+    .option.selected {
+        background: rgba(251, 254, 249, 0.15);
+        border-color: #FBFEF9;
+    }
+
+    .option.correct {
+        background: rgba(76, 175, 80, 0.2);
+        border-color: #4CAF50;
+    }
+
+    .option.incorrect {
+        background: rgba(244, 67, 54, 0.2);
+        border-color: #F44336;
+    }
+
+    .option.disabled {
+        cursor: not-allowed;
+        opacity: 0.6;
+    }
+
+    .quiz-controls {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 2rem;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        background: rgba(251, 254, 249, 0.1);
+        border: 2px solid rgba(251, 254, 249, 0.3);
+        color: #FBFEF9;
+        padding: 0.9rem 2rem;
+        border-radius: 12px;
+        cursor: pointer;
+        font-family: 'Lexend', sans-serif;
+        font-size: 1rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+        background: rgba(251, 254, 249, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .btn-primary {
+        background: #FBFEF9;
+        color: #153243;
+        border-color: #FBFEF9;
+    }
+
+    .btn-primary:hover {
+        background: #e8eee6;
+    }
+
+    .btn:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+    }
+
+    .feedback {
+        margin-top: 1.5rem;
+        padding: 1.2rem;
+        border-radius: 12px;
+        animation: slideUp 0.3s ease;
+    }
+
+    .feedback.correct {
+        background: rgba(76, 175, 80, 0.1);
+        border: 1px solid rgba(76, 175, 80, 0.3);
+    }
+
+    .feedback.incorrect {
+        background: rgba(244, 67, 54, 0.1);
+        border: 1px solid rgba(244, 67, 54, 0.3);
+    }
+
+    .results-screen {
+        text-align: center;
+        padding: 3rem 2rem;
+    }
+
+    .results-screen h2 {
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .score-display {
+        font-size: 4rem;
+        font-weight: 700;
+        margin: 2rem 0;
+        background: linear-gradient(135deg, #FBFEF9 0%, #a8b5c0 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+
+    .performance-message {
+        font-size: 1.2rem;
+        margin-bottom: 2rem;
+        opacity: 0.9;
+    }
+
+    .results-breakdown {
+        background: rgba(251, 254, 249, 0.03);
+        border: 1px solid rgba(251, 254, 249, 0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        margin: 2rem 0;
+        text-align: left;
+    }
+
+    .topic-score {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.8rem 0;
+        border-bottom: 1px solid rgba(251, 254, 249, 0.1);
+    }
+
+    .topic-score:last-child {
+        border-bottom: none;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes fadeInDown {
+        from {
+            opacity: 0;
+            transform: translateY(-20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .study-mode-selector {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-bottom: 2rem;
+    }
+
+    .mode-card {
+        background: rgba(251, 254, 249, 0.03);
+        border: 2px solid rgba(251, 254, 249, 0.1);
+        border-radius: 16px;
+        padding: 2rem;
+        flex: 1;
+        max-width: 300px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    .mode-card:hover {
+        background: rgba(251, 254, 249, 0.07);
+        border-color: rgba(251, 254, 249, 0.3);
+        transform: translateY(-4px);
+    }
+
+    .mode-card h3 {
+        font-size: 1.3rem;
+        margin-bottom: 0.8rem;
+    }
+
+    .mode-card p {
+        opacity: 0.7;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 768px) {
+        h1 {
+            font-size: 2rem;
+        }
+
+        .topic-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .modal-content {
+            padding: 2rem 1.5rem;
+            margin: 1rem;
+        }
+
+        .quiz-controls {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .study-mode-selector {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .mode-card {
+            max-width: 100%;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Econ Review</h1>
+            <p class="subtitle">💵👍</p>
+        </header>
+
+```
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('study')">Study Material</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">Practice Quiz</button>
+        <button class="tab-btn" onclick="switchTab('comprehensive')">Comprehensive Test</button>
+    </div>
+
+    <div id="study-section" class="content-section active">
+        <div class="topic-grid" id="topic-grid"></div>
+    </div>
+
+    <div id="quiz-section" class="content-section">
+        <div class="study-mode-selector">
+            <div class="mode-card" onclick="startQuiz('targeted')">
+                <h3>Chapter Practice</h3>
+                <p>Focus on specific chapters and master one topic at a time</p>
+            </div>
+            <div class="mode-card" onclick="startQuiz('random')">
+                <h3>Mixed Practice</h3>
+                <p>Random questions from all chapters to test overall understanding</p>
+            </div>
+        </div>
+        <div class="quiz-container" id="quiz-container"></div>
+    </div>
+
+    <div id="comprehensive-section" class="content-section">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h2>Comprehensive Exam</h2>
+                <p>Test your complete understanding with questions from all chapters</p>
+                <button class="btn btn-primary" onclick="startComprehensiveTest()" style="margin-top: 2rem;">Begin Test</button>
+            </div>
+            <div id="comprehensive-quiz-container"></div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+<script>
+            max-width: 100%;
+        }
+    }
+</style>
+```
+
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Econ Review</h1>
+            <p class="subtitle">💵👍</p>
+        </header>
+
+```
+    <div class="nav-tabs">
+        <button class="tab-btn active" onclick="switchTab('study')">Study Material</button>
+        <button class="tab-btn" onclick="switchTab('quiz')">Practice Quiz</button>
+        <button class="tab-btn" onclick="switchTab('calculators')">Calculators</button>
+        <button class="tab-btn" onclick="switchTab('comprehensive')">Final Exam Prep</button>
+    </div>
+
+    <div id="study-section" class="content-section active">
+        <div class="topic-grid" id="topic-grid"></div>
+    </div>
+
+    <div id="quiz-section" class="content-section">
+        <div class="study-mode-selector">
+            <div class="mode-card" onclick="startQuiz('targeted')">
+                <h3>Topic Practice</h3>
+                <p>Focus on specific topics and master one concept at a time</p>
+            </div>
+            <div class="mode-card" onclick="startQuiz('random')">
+                <h3>Mixed Practice</h3>
+                <p>Random questions from all topics to test overall understanding</p>
+            </div>
+        </div>
+        <div class="quiz-container" id="quiz-container"></div>
+    </div>
+
+    <div id="calculators-section" class="content-section">
+        <div class="calculator-section" id="calculator-section"></div>
+    </div>
+
+    <div id="comprehensive-section" class="content-section">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <h2>Final Exam Preparation</h2>
+                <p>Comprehensive test covering all course topics</p>
+                <button class="btn btn-primary" onclick="startComprehensiveTest()" style="margin-top: 2rem;">Begin Test</button>
+            </div>
+            <div id="comprehensive-quiz-container"></div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeModal()">&times;</button>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+<script>
+    const topics = [
+        {
+            number: 1,
+            title: "Engineering Economics Fundamentals",
+            description: "Decision making, ethics, cost estimation, cash flow diagrams",
+            content: `
+                <h2>Engineering Economics Fundamentals</h2>
+                
+                <h3>Engineering Economics Overview</h3>
+                <p>Engineering economics provides tools for making decisions involving money and resources in engineering projects. It combines technical knowledge with economic analysis.</p>
+
+                <h3>Decision Making Process</h3>
+                <ul>
+                    <li>Define the problem and objectives</li>
+                    <li>Identify feasible alternatives</li>
+                    <li>Collect relevant data and information</li>
+                    <li>Evaluate alternatives using appropriate criteria</li>
+                    <li>Select the best alternative</li>
+                    <li>Implement and monitor the decision</li>
+                </ul>
+
+                <h3>Ethics in Engineering Economics</h3>
+                <p>Ethical considerations in economic decisions:</p>
+                <ul>
+                    <li>Honesty in cost estimation and reporting</li>
+                    <li>Transparency in assumptions and methods</li>
+                    <li>Consideration of stakeholder impacts</li>
+                    <li>Environmental and social responsibility</li>
+                    <li>Avoiding conflicts of interest</li>
+                </ul>
+
+                <h3>Cost Estimation</h3>
+                <p>Types of costs in engineering projects:</p>
+                <ul>
+                    <li><strong>Fixed Costs:</strong> Costs that don't vary with production level</li>
+                    <li><strong>Variable Costs:</strong> Costs that change with production volume</li>
+                    <li><strong>Direct Costs:</strong> Costs directly attributable to a project</li>
+                    <li><strong>Indirect Costs:</strong> Overhead costs shared across projects</li>
+                    <li><strong>Sunk Costs:</strong> Past costs that cannot be recovered</li>
+                    <li><strong>Opportunity Costs:</strong> Benefits foregone by choosing one alternative over another</li>
+                </ul>
+
+                <h3>Dealing with Abstractions</h3>
+                <p>Engineering economics uses simplified models of reality:</p>
+                <ul>
+                    <li>Assumptions help make complex problems manageable</li>
+                    <li>Models focus on key variables affecting decisions</li>
+                    <li>Sensitivity analysis tests impact of assumptions</li>
+                    <li>Results should be interpreted in context of limitations</li>
+                </ul>
+
+                <h3>Cash Flow Diagrams</h3>
+                <p>Visual representation of money flows over time:</p>
+                <ul>
+                    <li>Time flows horizontally (left to right)</li>
+                    <li>Upward arrows represent cash inflows (receipts)</li>
+                    <li>Downward arrows represent cash outflows (expenditures)</li>
+                    <li>Arrow heights represent relative magnitudes</li>
+                    <li>Time periods marked on horizontal axis</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: Project Cash Flow</h4>
+                    <p>Initial investment: $50,000 (downward arrow at t=0)</p>
+                    <p>Annual returns: $15,000 for years 1-5 (upward arrows)</p>
+                    <p>This diagram helps visualize the timing and magnitude of all cash flows</p>
+                </div>
+            `
+        },
+        {
+            number: 2,
+            title: "Time Value of Money & Equivalence",
+            description: "Single-payment formulas, compound interest, nominal and effective rates",
+            content: `
+                <h2>Time Value of Money & Equivalence</h2>
+                
+                <h3>Core Principle</h3>
+                <p>Money available today is worth more than the same amount in the future because it can be invested to earn returns. This fundamental concept underlies all engineering economic analysis.</p>
+
+                <h3>Single-Payment Compound Amount</h3>
+                <p>Find future value of a present amount:</p>
+                <div class="formula">F = P(1 + i)^n<br>or F = P(F/P, i%, n)<br><br>Where:<br>F = Future value<br>P = Present value<br>i = interest rate per period<br>n = number of periods</div>
+
+                <h3>Single-Payment Present Worth</h3>
+                <p>Find present value of a future amount:</p>
+                <div class="formula">P = F(1 + i)^-n<br>or P = F(P/F, i%, n)<br><br>This is the reciprocal of compound amount</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>What is the future value of $5,000 invested at 8% annual interest for 10 years?</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>F = 5,000(1 + 0.08)^10 = 5,000(2.1589) = $10,794.50</p>
+                </div>
+
+                <h3>Economic Equivalence</h3>
+                <p>Two cash flow patterns are economically equivalent if they have the same value when discounted to the same point in time at the same interest rate.</p>
+
+                <h3>Compound Interest</h3>
+                <p>Interest calculated on the initial principal plus accumulated interest from previous periods. This creates exponential growth.</p>
+
+                <h3>Nominal vs Effective Interest Rates</h3>
+                <p><strong>Nominal Rate (r):</strong> Stated annual rate without considering compounding frequency</p>
+                <p><strong>Effective Rate (i):</strong> Actual annual rate accounting for compounding</p>
+                <div class="formula">i_eff = (1 + r/m)^m - 1<br><br>Where:<br>r = nominal annual rate<br>m = number of compounding periods per year</div>
+
+                <div class="example-box">
+                    <h4>Example: Nominal vs Effective</h4>
+                    <p>A bank advertises 12% annual interest compounded monthly. What is the effective rate?</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>i_eff = (1 + 0.12/12)^12 - 1 = (1.01)^12 - 1 = 0.1268 = 12.68%</p>
+                </div>
+
+                <h3>Continuous Compounding</h3>
+                <p>As compounding periods approach infinity:</p>
+                <div class="formula">F = Pe^(rn)<br>i_eff = e^r - 1</div>
+
+                <h3>Interest Period vs Payment Period</h3>
+                <p>When payment and compounding periods differ:</p>
+                <ul>
+                    <li>Convert to effective rate per payment period</li>
+                    <li>Use this rate in standard formulas</li>
+                    <li>Ensure time periods match throughout analysis</li>
+                </ul>
+            `
+        },
+        {
+            number: 3,
+            title: "Cash Flow Series & Uniform Payments",
+            description: "Annuities, uniform series, arithmetic and geometric gradients",
+            content: `
+                <h2>Cash Flow Series & Uniform Payments</h2>
+                
+                <h3>Uniform Series (Annuities)</h3>
+                <p>A series of equal payments at regular intervals</p>
+
+                <h3>Uniform Series Compound Amount</h3>
+                <p>Future value of a series of equal payments:</p>
+                <div class="formula">F = A[(1 + i)^n - 1]/i<br>or F = A(F/A, i%, n)</div>
+
+                <h3>Uniform Series Sinking Fund</h3>
+                <p>Equal payment needed to accumulate a future amount:</p>
+                <div class="formula">A = F[i/(1 + i)^n - 1]<br>or A = F(A/F, i%, n)</div>
+
+                <h3>Uniform Series Capital Recovery</h3>
+                <p>Equal payment needed to repay a present amount:</p>
+                <div class="formula">A = P[i(1 + i)^n]/[(1 + i)^n - 1]<br>or A = P(A/P, i%, n)</div>
+
+                <h3>Uniform Series Present Worth</h3>
+                <p>Present value of a series of equal payments:</p>
+                <div class="formula">P = A[(1 + i)^n - 1]/[i(1 + i)^n]<br>or P = A(P/A, i%, n)</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>You need to save $100,000 in 20 years. If you can earn 6% annually, how much should you deposit each year?</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>A = F(A/F, 6%, 20) = 100,000[0.06/(1.06^20 - 1)]</p>
+                    <p>A = 100,000(0.02718) = $2,718 per year</p>
+                </div>
+
+                <h3>Arithmetic Gradient Series</h3>
+                <p>Cash flows that increase or decrease by a constant amount (G) each period:</p>
+                <div class="formula">P = G[(1 + i)^n - in - 1]/[i^2(1 + i)^n]<br>or P = G(P/G, i%, n)</div>
+
+                <p>Total present worth with base amount A and gradient G:</p>
+                <div class="formula">P_total = A(P/A, i%, n) + G(P/G, i%, n)</div>
+
+                <div class="example-box">
+                    <h4>Example: Arithmetic Gradient</h4>
+                    <p>Maintenance costs are $1,000 in year 1 and increase by $200 each year for 5 years. Find present worth at 10%.</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>P = 1,000(P/A, 10%, 5) + 200(P/G, 10%, 5)</p>
+                    <p>P = 1,000(3.791) + 200(6.862) = $5,163.40</p>
+                </div>
+
+                <h3>Geometric Gradient Series</h3>
+                <p>Cash flows that increase or decrease by a constant percentage (g) each period:</p>
+                <div class="formula">P = A₁[(1 - (1 + g)^n(1 + i)^-n)/(i - g)]  if i ≠ g<br><br>P = A₁[n/(1 + i)]  if i = g</div>
+
+                <h3>Applications: Mortgages and Bonds</h3>
+                <p><strong>Mortgages:</strong> Loans repaid through uniform series of payments covering principal and interest</p>
+                <p><strong>Bonds:</strong> Debt securities with periodic interest payments and principal repayment at maturity</p>
+
+                <div class="example-box">
+                    <h4>Example: Bond Valuation</h4>
+                    <p>A bond pays $50 interest annually for 10 years and returns $1,000 principal at maturity. If market rate is 6%, find present value.</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>P = 50(P/A, 6%, 10) + 1,000(P/F, 6%, 10)</p>
+                    <p>P = 50(7.360) + 1,000(0.5584) = $926.40</p>
+                </div>
+            `
+        },
+        {
+            number: 4,
+            title: "Comparison Methods I: PW & AW",
+            description: "Present worth analysis, annual worth analysis, minimum acceptable rate of return",
+            content: `
+                <h2>Comparison Methods I: Present Worth & Annual Worth</h2>
+                
+                <h3>Present Worth (PW) Analysis</h3>
+                <p>Convert all cash flows to their equivalent value at time zero using MARR as the discount rate.</p>
+
+                <div class="formula">PW = -Initial Cost + PW of Benefits - PW of Costs + PW of Salvage</div>
+
+                <h3>Decision Criteria</h3>
+                <ul>
+                    <li><strong>Single Project:</strong> Accept if PW ≥ 0</li>
+                    <li><strong>Multiple Alternatives:</strong> Select alternative with highest PW</li>
+                    <li><strong>Do Nothing:</strong> Always an option (PW = 0)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: Present Worth</h4>
+                    <p>Machine A costs $30,000, saves $8,000/year for 6 years, salvage $3,000. MARR = 12%. Find PW.</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>PW = -30,000 + 8,000(P/A, 12%, 6) + 3,000(P/F, 12%, 6)</p>
+                    <p>PW = -30,000 + 8,000(4.111) + 3,000(0.5066)</p>
+                    <p>PW = -30,000 + 32,888 + 1,520 = $4,408</p>
+                    <p>Accept the project since PW > 0</p>
+                </div>
+
+                <h3>Annual Worth (AW) Analysis</h3>
+                <p>Convert all cash flows to an equivalent uniform annual series over the project life.</p>
+
+                <div class="formula">AW = -Initial Cost(A/P, i%, n) + Annual Benefits - Annual Costs + Salvage(A/F, i%, n)</div>
+
+                <h3>Advantages of Annual Worth</h3>
+                <ul>
+                    <li>Easy to understand (annual profit or cost)</li>
+                    <li>No need to find least common multiple for different project lives</li>
+                    <li>Convenient for projects with different lifespans</li>
+                    <li>Directly comparable to annual budgets</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: Annual Worth</h4>
+                    <p>Same machine as above. Find AW.</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>AW = -30,000(A/P, 12%, 6) + 8,000 + 3,000(A/F, 12%, 6)</p>
+                    <p>AW = -30,000(0.2432) + 8,000 + 3,000(0.1232)</p>
+                    <p>AW = -7,296 + 8,000 + 370 = $1,074</p>
+                    <p>Positive AW confirms project should be accepted</p>
+                </div>
+
+                <h3>Minimum Acceptable Rate of Return (MARR)</h3>
+                <p>The minimum return an organization requires before investing in a project. Also called hurdle rate.</p>
+
+                <h3>Components of MARR</h3>
+                <ul>
+                    <li><strong>Cost of Capital:</strong> Cost of obtaining funds (debt + equity)</li>
+                    <li><strong>Risk Premium:</strong> Additional return for project risk</li>
+                    <li><strong>Opportunity Cost:</strong> Return from best alternative use of funds</li>
+                </ul>
+
+                <h3>Comparing Alternatives with Unequal Lives</h3>
+                <p><strong>Study Period Method:</strong> Use common analysis period (often least common multiple of lives)</p>
+                <p><strong>Annual Worth Method:</strong> Calculate AW for each alternative over its own life (automatically accounts for different lives)</p>
+
+                <h3>Independent vs Mutually Exclusive Projects</h3>
+                <p><strong>Independent:</strong> Acceptance of one doesn't preclude others. Accept all with PW or AW ≥ 0.</p>
+                <p><strong>Mutually Exclusive:</strong> Can select only one. Choose alternative with highest positive PW or AW.</p>
+
+                <h3>Payback Period</h3>
+                <p>Time required to recover initial investment from net cash flows:</p>
+                <div class="formula">Payback Period = Initial Investment / Uniform Annual Cash Flow</div>
+
+                <p><strong>Limitations:</strong></p>
+                <ul>
+                    <li>Ignores time value of money (unless discounted payback used)</li>
+                    <li>Ignores cash flows after payback period</li>
+                    <li>No measure of profitability</li>
+                    <li>Best used as preliminary screening tool</li>
+                </ul>
+            `
+        },
+        {
+            number: 5,
+            title: "Comparison Methods II: Rate of Return",
+            description: "IRR for single and multiple projects, incremental analysis",
+            content: `
+                <h2>Comparison Methods II: Rate of Return Analysis</h2>
+                
+                <h3>Internal Rate of Return (IRR)</h3>
+                <p>The discount rate that makes the present worth (or annual worth) of a project equal to zero. It represents the actual return earned by the project.</p>
+
+                <div class="formula">PW = 0 = -Initial Cost + Σ[Cash Flow_t / (1 + IRR)^t]</div>
+
+                <h3>IRR Decision Criteria</h3>
+                <ul>
+                    <li><strong>Single Project:</strong> Accept if IRR ≥ MARR</li>
+                    <li><strong>Independent Projects:</strong> Accept all with IRR ≥ MARR</li>
+                    <li><strong>Mutually Exclusive:</strong> Use incremental analysis</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: Finding IRR</h4>
+                    <p>Investment: $10,000. Annual return: $3,000 for 5 years. Find IRR.</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>0 = -10,000 + 3,000(P/A, i%, 5)</p>
+                    <p>(P/A, i%, 5) = 10,000/3,000 = 3.333</p>
+                    <p>From tables or calculator: IRR ≈ 15.2%</p>
+                    <p>If MARR = 12%, accept project since 15.2% > 12%</p>
+                </div>
+
+                <h3>IRR for Independent Projects</h3>
+                <p>Projects that don't compete with each other. Accept all projects where IRR exceeds MARR, subject to budget constraints.</p>
+
+                <h3>IRR for Mutually Exclusive Projects</h3>
+                <p>Cannot simply compare IRRs directly. Must use incremental analysis.</p>
+
+                <h3>Incremental Analysis Procedure</h3>
+                <ol>
+                    <li>Order alternatives by increasing initial investment</li>
+                    <li>Compare pairs incrementally (higher cost - lower cost)</li>
+                    <li>Calculate IRR on the increment</li>
+                    <li>If IRR_increment ≥ MARR, choose higher-cost alternative</li>
+                    <li>Compare winner with next alternative</li>
+                    <li>Continue until all alternatives compared</li>
+                </ol>
+
+                <div class="example-box">
+                    <h4>Example: Incremental Analysis</h4>
+                    <p>Alternative A: Cost $20,000, IRR = 20%</p>
+                    <p>Alternative B: Cost $35,000, IRR = 17%</p>
+                    <p>MARR = 12%. Which is better?</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Cannot choose B just because both exceed MARR. Must analyze increment B-A.</p>
+                    <p>If IRR on $15,000 increment ≥ 12%, choose B. Otherwise choose A.</p>
+                    <p>This requires detailed cash flow analysis of the difference.</p>
+                </div>
+
+                <h3>Multiple IRRs Problem</h3>
+                <p>Projects with non-conventional cash flows (multiple sign changes) may have multiple IRRs or no real IRR.</p>
+
+                <p><strong>Example:</strong> Cash flows of -100, +300, -220 can have two IRRs</p>
+
+                <h3>External Rate of Return (ERR)</h3>
+                <p>Modified method that assumes positive cash flows are reinvested at MARR rather than project's IRR. Solves multiple IRR problem.</p>
+
+                <h3>When to Use Each Method</h3>
+                <ul>
+                    <li><strong>PW Method:</strong> Most reliable, especially for mutually exclusive projects</li>
+                    <li><strong>AW Method:</strong> Best for unequal lives</li>
+                    <li><strong>IRR Method:</strong> Popular with management, intuitive percentage return</li>
+                    <li><strong>Payback:</strong> Quick screening, emphasizes liquidity</li>
+                </ul>
+
+                <h3>Sensitivity Analysis</h3>
+                <p>Test how changes in estimates affect the rate of return:</p>
+                <ul>
+                    <li>Vary one parameter at a time</li>
+                    <li>Recalculate IRR for each variation</li>
+                    <li>Identify most sensitive variables</li>
+                    <li>Use results to manage risk</li>
+                </ul>
+
+                <h3>Break-Even Analysis</h3>
+                <p>Find the value of a variable where IRR equals MARR or where two alternatives are equivalent.</p>
+            `
+        },
+        {
+            number: 6,
+            title: "Replacement Decisions",
+            description: "Defender vs challenger, replacement timing, economic service life",
+            content: `
+                <h2>Replacement Decisions</h2>
+                
+                <h3>Replacement Analysis Framework</h3>
+                <p>Deciding whether to replace existing equipment (defender) with new equipment (challenger).</p>
+
+                <h3>Key Terminology</h3>
+                <ul>
+                    <li><strong>Defender:</strong> Currently owned asset being considered for replacement</li>
+                    <li><strong>Challenger:</strong> Potential replacement asset</li>
+                    <li><strong>Economic Service Life (ESL):</strong> Period minimizing equivalent annual cost</li>
+                    <li><strong>Market Value:</strong> Current selling price of defender</li>
+                </ul>
+
+                <h3>Reasons for Replacement</h3>
+                <ul>
+                    <li><strong>Physical Impairment:</strong> Increased maintenance, reduced performance</li>
+                    <li><strong>Altered Requirements:</strong> Changed capacity needs</li>
+                    <li><strong>Technology:</strong> More efficient alternatives available</li>
+                    <li><strong>Obsolescence:</strong> Asset no longer suitable for current use</li>
+                </ul>
+
+                <h3>Defender and Challenger Are Identical</h3>
+                <p>When challenger is identical to defender (same type, capacity):</p>
+                <ul>
+                    <li>Compare using economic service life</li>
+                    <li>Replace when defender's annual cost exceeds challenger's minimum annual cost</li>
+                    <li>Assumes assets available indefinitely</li>
+                </ul>
+
+                <h3>Defender and Challenger Are Different</h3>
+                <p>When assets have different capacities or characteristics:</p>
+                <ul>
+                    <li>Must account for differences in output/capacity</li>
+                    <li>Use annual worth method for different lives</li>
+                    <li>Consider intangible factors (flexibility, obsolescence risk)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: Basic Replacement</h4>
+                    <p>Defender: Market value $15,000, annual cost $8,000, 3 years remaining life</p>
+                    <p>Challenger: Cost $40,000, annual cost $5,000, 6 year life, salvage $4,000</p>
+                    <p>MARR = 10%. Should we replace?</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Defender AW = -15,000(A/P,10%,3) - 8,000 = -15,000(0.4021) - 8,000 = -$14,032</p>
+                    <p>Challenger AW = -40,000(A/P,10%,6) - 5,000 + 4,000(A/F,10%,6)</p>
+                    <p>= -40,000(0.2296) - 5,000 + 4,000(0.1296) = -$13,666</p>
+                    <p>Replace now since challenger has lower annual cost</p>
+                </div>
+
+                <h3>Defender's Economic Life</h3>
+                <p>Calculate total annual cost for each possible remaining year:</p>
+                <div class="formula">Total Annual Cost = Capital Recovery Cost + Operating Cost<br>Capital Recovery = (Market Value - Salvage)(A/P, i%, n) + Salvage(i)</div>
+
+                <h3>Challenger Does Not Repeat</h3>
+                <p>When challenger represents unique technology or limited opportunity:</p>
+                <ul>
+                    <li>Compare over study period that makes business sense</li>
+                    <li>Account for what happens after challenger's life</li>
+                    <li>May need to estimate future replacement costs</li>
+                </ul>
+
+                <h3>Economic Service Life (ESL)</h3>
+                <p>The period that minimizes the equivalent annual cost of ownership and operation.</p>
+
+                <p>Typically:</p>
+                <ul>
+                    <li>Operating costs increase with age</li>
+                    <li>Capital recovery costs decrease with longer ownership</li>
+                    <li>ESL is where total annual cost is minimized</li>
+                </ul>
+
+                <h3>Replacement Strategy</h3>
+                <p><strong>Keep Defender if:</strong></p>
+                <ul>
+                    <li>Defender's annual cost < Challenger's minimum annual cost</li>
+                    <li>One more year before reconsidering</li>
+                </ul>
+
+                <p><strong>Replace with Challenger if:</strong></p>
+                <ul>
+                    <li>Challenger's minimum annual cost < Defender's annual cost</li>
+                    <li>Replace now</li>
+                </ul>
+
+                <h3>Replacement Analysis Assumptions</h3>
+                <ul>
+                    <li>Sunk costs are irrelevant (original cost of defender doesn't matter)</li>
+                    <li>Use current market value for defender</li>
+                    <li>Future assets similar to current challenger available</li>
+                    <li>Analysis uses before-tax cash flows unless specified</li>
+                </ul>
+            `
+        },
+        {
+            number: 7,
+            title: "Depreciation & Income Taxes",
+            description: "Depreciation methods, CCA, cash flow with taxes",
+            content: `
+                <h2>Depreciation & Income Taxes</h2>
+                
+                <h3>Depreciation Fundamentals</h3>
+                <p>Depreciation allocates the cost of tangible assets over their useful lives for accounting and tax purposes.</p>
+
+                <h3>Key Terms</h3>
+                <ul>
+                    <li><strong>Cost Basis (B):</strong> Original cost including installation</li>
+                    <li><strong>Salvage Value (S):</strong> Expected value at end of useful life</li>
+                    <li><strong>Useful Life (N):</strong> Expected service period</li>
+                    <li><strong>Book Value (BV):</strong> Cost basis minus accumulated depreciation</li>
+                    <li><strong>Market Value:</strong> Actual selling price (may differ from book value)</li>
+                </ul>
+
+                <h3>Straight-Line Depreciation</h3>
+                <p>Equal depreciation each year:</p>
+                <div class="formula">D = (B - S) / N<br>BV_t = B - t × D</div>
+
+                <div class="example-box">
+                    <h4>Example: Straight-Line</h4>
+                    <p>Equipment: $50,000, Salvage: $5,000, Life: 9 years</p>
+                    <p>D = (50,000 - 5,000) / 9 = $5,000/year</p>
+                    <p>Year 5 BV = 50,000 - 5(5,000) = $25,000</p>
+                </div>
+
+                <h3>Declining Balance Depreciation</h3>
+                <p>Constant percentage of remaining book value:</p>
+                <div class="formula">D_t = d × BV_(t-1)<br>BV_t = B(1 - d)^t<br><br>Common: 200% declining balance where d = 2/N</div>
+
+                <h3>Capital Cost Allowance (CCA) - Canada</h3>
+                <p>Canadian tax depreciation system using declining balance method with prescribed rates for different asset classes.</p>
+
+                <h3>Common CCA Classes</h3>
+                <ul>
+                    <li><strong>Class 1 (4%):</strong> Buildings</li>
+                    <li><strong>Class 8 (20%):</strong> Furniture, machinery not in other classes</li>
+                    <li><strong>Class 10 (30%):</strong> Vehicles, computer hardware</li>
+                    <li><strong>Class 12 (100%):</strong> Small tools, software</li>
+                    <li><strong>Class 43 (30%):</strong> Manufacturing equipment</li>
+                    <li><strong>Class 50 (55%):</strong> Computer equipment (post-2015)</li>
+                </ul>
+
+                <h3>Half-Year Rule (50% Rule)</h3>
+                <p>In year of acquisition, only 50% of net additions can be depreciated:</p>
+                <div class="formula">First Year CCA = (Additions - Disposals) × Rate × 0.5</div>
+
+                <div class="example-box">
+                    <h4>Example: CCA Calculation</h4>
+                    <p>Purchase $80,000 equipment (Class 8, 20%)</p>
+                    <p>Year 1: CCA = 80,000 × 0.20 × 0.5 = $8,000</p>
+                    <p>UCC end Year 1 = 80,000 - 8,000 = $72,000</p>
+                    <p>Year 2: CCA = 72,000 × 0.20 = $14,400</p>
+                    <p>UCC end Year 2 = 72,000 - 14,400 = $57,600</p>
+                </div>
+
+                <h3>Undepreciated Capital Cost (UCC)</h3>
+                <p>The balance remaining for CCA purposes:</p>
+                <div class="formula">UCC = Previous UCC - CCA + Additions - Disposals</div>
+
+                <h3>Income, Depreciation, and Cash Flow</h3>
+                <p>Depreciation affects taxable income but is not a cash flow:</p>
+
+                <div class="formula">Taxable Income = Revenue - Expenses - Depreciation<br>Income Tax = Taxable Income × Tax Rate<br>After-Tax Cash Flow = Revenue - Expenses - Taxes</div>
+
+                <h3>Tax Shield from Depreciation</h3>
+                <p>Depreciation reduces taxes, creating a tax benefit:</p>
+                <div class="formula">Tax Shield = Depreciation × Tax Rate</div>
+
+                <div class="example-box">
+                    <h4>Example: Tax Impact</h4>
+                    <p>Revenue: $100,000, Expenses: $40,000, Depreciation: $20,000, Tax rate: 30%</p>
+                    <p>Taxable Income = 100,000 - 40,000 - 20,000 = $40,000</p>
+                    <p>Tax = 40,000 × 0.30 = $12,000</p>
+                    <p>After-Tax Cash Flow = 100,000 - 40,000 - 12,000 = $48,000</p>
+                    <p>Tax Shield = 20,000 × 0.30 = $6,000 saved</p>
+                </div>
+
+                <h3>Basic Elements of Financial Accounting</h3>
+                <ul>
+                    <li><strong>Assets:</strong> Resources owned (cash, equipment, inventory)</li>
+                    <li><strong>Liabilities:</strong> Obligations owed (loans, accounts payable)</li>
+                    <li><strong>Equity:</strong> Owner's stake (Assets - Liabilities)</li>
+                    <li><strong>Revenue:</strong> Income from operations</li>
+                    <li><strong>Expenses:</strong> Costs incurred in earning revenue</li>
+                </ul>
+
+                <h3>Disposal and Recapture</h3>
+                <p><strong>If Proceeds < UCC:</strong> Continue claiming CCA or take terminal loss if last asset</p>
+                <p><strong>If Proceeds > UCC:</strong> Recapture (added to income)</p>
+                <p><strong>If Proceeds > Original Cost:</strong> Capital gain (50% taxable) plus recapture</p>
+            `
+        },
+        {
+            number: 8,
+            title: "After-Tax Analysis",
+            description: "After-tax cash flows, tax factors, working capital, minimum attractive rate",
+            content: `
+                <h2>After-Tax Cash Flow Analysis</h2>
+                
+                <h3>Importance of After-Tax Analysis</h3>
+                <p>Corporate income taxes significantly affect project economics. After-tax analysis provides realistic assessment of investment value.</p>
+
+                <h3>Components of After-Tax Cash Flow</h3>
+                <div class="formula">After-Tax Cash Flow = (Revenue - Operating Expenses)(1 - Tax Rate) + (Depreciation × Tax Rate) + Salvage - Capital Gains Tax</div>
+
+                <h3>Tax Treatment of Different Items</h3>
+                <ul>
+                    <li><strong>Revenue:</strong> Fully taxable</li>
+                    <li><strong>Operating Expenses:</strong> Fully deductible</li>
+                    <li><strong>Depreciation:</strong> Tax shield (reduces taxable income)</li>
+                    <li><strong>Capital Expenditure:</strong> Not immediately deductible (depreciated)</li>
+                    <li><strong>Loan Principal:</strong> Not deductible (interest is deductible)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: After-Tax Cash Flow</h4>
+                    <p>Year 1 Revenue: $200,000, Operating costs: $80,000, CCA: $15,000, Tax rate: 35%</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Taxable Income = 200,000 - 80,000 - 15,000 = $105,000</p>
+                    <p>Tax = 105,000 × 0.35 = $36,750</p>
+                    <p>After-Tax CF = 200,000 - 80,000 - 36,750 = $83,250</p>
+                    <p>Or: (200,000 - 80,000)(1 - 0.35) + 15,000(0.35) = $83,250</p>
+                </div>
+
+                <h3>Capital Tax Factors</h3>
+                <p>The present value of CCA tax shield for an asset:</p>
+                <div class="formula">PV of CCA Tax Shield = (C × d × T)/(d + i) × [(1 + 0.5i)/(1 + i)]<br><br>Where:<br>C = Capital cost<br>d = CCA rate<br>T = Tax rate<br>i = Discount rate (after-tax MARR)</div>
+
+                <h3>Disposal Effects on CCA</h3>
+                <p>When asset is sold, reduce the PV of CCA tax shield by disposal proceeds:</p>
+                <div class="formula">Lost Tax Shield = (S × d × T)/(d + i) × [1/(1 + i)^n]<br><br>Where S = Salvage value, n = disposal year</div>
+
+                <h3>Working Capital</h3>
+                <p>Funds needed for day-to-day operations (inventory, accounts receivable minus accounts payable):</p>
+                <ul>
+                    <li>Required at project start (cash outflow)</li>
+                    <li>Recovered at project end (cash inflow)</li>
+                    <li>Not depreciable (no tax shield)</li>
+                    <li>Changes in working capital affect cash flow</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: Working Capital</h4>
+                    <p>Project requires $50,000 working capital at start, recovered at end of 5-year life</p>
+                    <p>Year 0: Cash outflow = -$50,000</p>
+                    <p>Year 5: Cash inflow = +$50,000</p>
+                    <p>These are after-tax cash flows (no tax effect)</p>
+                </div>
+
+                <h3>After-Tax Minimum Attractive Rate of Return</h3>
+                <p>After-tax MARR must be used with after-tax cash flows:</p>
+                <div class="formula">MARR_(after-tax) = MARR_(before-tax) × (1 - Tax Rate)</div>
+
+                <p>Or build up from components:</p>
+                <div class="formula">MARR_(after-tax) = After-tax cost of capital + Risk premium</div>
+
+                <h3>After-Tax Analysis Procedure</h3>
+                <ol>
+                    <li>Identify all cash flows (capital, operating, salvage)</li>
+                    <li>Calculate depreciation (CCA) for tax purposes</li>
+                    <li>Compute taxable income each year</li>
+                    <li>Calculate income taxes</li>
+                    <li>Determine after-tax cash flows</li>
+                    <li>Apply after-tax MARR for economic analysis</li>
+                    <li>Calculate PW, AW, or IRR on after-tax basis</li>
+                </ol>
+
+                <h3>Loan Payments and Taxes</h3>
+                <p>Interest portion of loan payment is tax deductible, principal is not:</p>
+                <ul>
+                    <li>Interest expense reduces taxable income</li>
+                    <li>Interest tax shield = Interest × Tax rate</li>
+                    <li>Principal repayment is after-tax cash flow</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: Loan Tax Effect</h4>
+                    <p>Annual loan payment: $10,000 (Interest: $6,000, Principal: $4,000), Tax rate: 40%</p>
+                    <p>Tax savings from interest = 6,000 × 0.40 = $2,400</p>
+                    <p>After-tax cost = 10,000 - 2,400 = $7,600</p>
+                </div>
+
+                <h3>Lease vs Buy After-Tax Analysis</h3>
+                <p><strong>Leasing:</strong></p>
+                <ul>
+                    <li>Lease payments fully deductible</li>
+                    <li>No CCA claims (lessor owns asset)</li>
+                    <li>After-tax lease cost = Lease payment × (1 - Tax rate)</li>
+                </ul>
+
+                <p><strong>Buying:</strong></p>
+                <ul>
+                    <li>Capital cost provides CCA tax shield</li>
+                    <li>Interest on loan deductible</li>
+                    <li>More complex cash flow analysis</li>
+                </ul>
+            `
+        },
+        {
+            number: 9,
+            title: "Inflation & Price Changes",
+            description: "Inflation effects, constant vs then-current dollars, price indices",
+            content: `
+                <h2>Inflation & Price Changes</h2>
+                
+                <h3>Understanding Inflation</h3>
+                <p>Inflation is the increase in general price levels over time, reducing the purchasing power of money.</p>
+
+                <h3>Key Concepts</h3>
+                <ul>
+                    <li><strong>Then-Current (Actual) Dollars:</strong> Nominal amounts at time of transaction</li>
+                    <li><strong>Constant (Real) Dollars:</strong> Amounts adjusted to base-year purchasing power</li>
+                    <li><strong>General Inflation Rate (f):</strong> Overall price level increase</li>
+                    <li><strong>Specific Price Change:</strong> Rate for particular commodity (may differ from general inflation)</li>
+                </ul>
+
+                <h3>Inflation Rate and Indices</h3>
+                <p>Consumer Price Index (CPI) measures inflation:</p>
+                <div class="formula">Inflation Rate = (CPI_current - CPI_previous) / CPI_previous</div>
+
+                <h3>Converting Between Dollar Types</h3>
+                <p>From constant to then-current dollars:</p>
+                <div class="formula">Then-Current Dollar_n = Constant Dollar_n × (1 + f)^n</div>
+
+                <p>From then-current to constant dollars:</p>
+                <div class="formula">Constant Dollar_n = Then-Current Dollar_n / (1 + f)^n</div>
+
+                <div class="example-box">
+                    <h4>Example: Dollar Conversion</h4>
+                    <p>Cost today: $10,000 in constant dollars. Inflation = 3%. Find cost in year 5 (then-current).</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Then-Current = 10,000 × (1.03)^5 = 10,000 × 1.159 = $11,590</p>
+                </div>
+
+                <h3>Interest Rates and Inflation</h3>
+                <p><strong>Nominal (Market) Rate (i):</strong> Rate quoted by banks, includes inflation</p>
+                <p><strong>Real Interest Rate (i'):</strong> Rate excluding inflation effect</p>
+
+                <div class="formula">1 + i = (1 + i')(1 + f)<br>or<br>i' = (1 + i)/(1 + f) - 1<br>Approximation: i' ≈ i - f</div>
+
+                <div class="example-box">
+                    <h4>Example: Real vs Nominal Rate</h4>
+                    <p>Nominal rate: 10%, Inflation: 4%. Find real rate.</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>i' = (1.10/1.04) - 1 = 1.0577 - 1 = 5.77%</p>
+                    <p>Approximation: 10% - 4% = 6% (close but not exact)</p>
+                </div>
+
+                <h3>Consistent Analysis Approaches</h3>
+                <p><strong>Approach 1: Then-Current Dollar Analysis</strong></p>
+                <ul>
+                    <li>Use then-current dollar cash flows</li>
+                    <li>Use nominal interest rate (market rate)</li>
+                    <li>Includes inflation in both cash flows and rate</li>
+                </ul>
+
+                <p><strong>Approach 2: Constant Dollar Analysis</strong></p>
+                <ul>
+                    <li>Use constant dollar cash flows</li>
+                    <li>Use real interest rate</li>
+                    <li>Removes inflation from both cash flows and rate</li>
+                </ul>
+
+                <p><strong>Important:</strong> Both approaches give same result if applied consistently. Never mix then-current dollars with real rates or constant dollars with nominal rates.</p>
+
+                <h3>Effect of Inflation on After-Tax Analysis</h3>
+                <p>Inflation can hurt or help depending on situation:</p>
+
+                <p><strong>Negative Effects:</strong></p>
+                <ul>
+                    <li>CCA based on historical cost (not inflated value)</li>
+                    <li>Tax shield worth less in inflated dollars</li>
+                    <li>Fixed loan payments easier but tax shield erodes</li>
+                </ul>
+
+                <p><strong>Positive Effects:</strong></p>
+                <ul>
+                    <li>Revenue may increase faster than costs</li>
+                    <li>Fixed debt repaid with cheaper dollars</li>
+                    <li>Real value of fixed obligations decreases</li>
+                </ul>
+
+                <h3>Different Inflation Rates for Different Items</h3>
+                <p>Not all costs inflate at the same rate:</p>
+                <ul>
+                    <li>Labor costs may increase faster than general inflation</li>
+                    <li>Technology costs may decrease</li>
+                    <li>Energy costs highly variable</li>
+                    <li>Use specific escalation rates when known</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: Different Inflation Rates</h4>
+                    <p>Revenue increases 4%/year, Labor costs increase 5%/year, Materials increase 3%/year</p>
+                    <p>Current: Revenue $100K, Labor $40K, Materials $30K</p>
+                    <p>Year 3:</p>
+                    <p>Revenue = 100K(1.04)^3 = $112.5K</p>
+                    <p>Labor = 40K(1.05)^3 = $46.3K</p>
+                    <p>Materials = 30K(1.03)^3 = $32.8K</p>
+                </div>
+
+                <h3>Inflation and Replacement Analysis</h3>
+                <ul>
+                    <li>Use consistent dollar basis for defender and challenger</li>
+                    <li>Account for inflated future costs in economic life</li>
+                    <li>Consider technological improvements reducing real costs</li>
+                    <li>Market value of defender may be affected by inflation</li>
+                </ul>
+            `
+        },
+        {
+            number: 10,
+            title: "Course Review & Integration",
+            description: "Comprehensive review, exam preparation, problem-solving strategies",
+            content: `
+                <h2>Course Review & Integration</h2>
+                
+                <h3>Core Economic Analysis Methods</h3>
+                <p>Summary of the four main evaluation techniques:</p>
+
+                <h3>1. Present Worth (PW)</h3>
+                <ul>
+                    <li>Convert all cash flows to time zero</li>
+                    <li>Most reliable for mutually exclusive projects</li>
+                    <li>Requires study period definition</li>
+                    <li>Decision: Accept if PW ≥ 0, choose highest PW</li>
+                </ul>
+
+                <h3>2. Annual Worth (AW)</h3>
+                <ul>
+                    <li>Convert to equivalent uniform annual series</li>
+                    <li>Best for unequal project lives</li>
+                    <li>Easy to understand and compare to budgets</li>
+                    <li>Decision: Accept if AW ≥ 0, choose highest AW</li>
+                </ul>
+
+                <h3>3. Internal Rate of Return (IRR)</h3>
+                <ul>
+                    <li>Find rate where PW = 0</li>
+                    <li>Intuitive percentage return</li>
+                    <li>Requires incremental analysis for mutually exclusive projects</li>
+                    <li>Decision: Accept if IRR ≥ MARR</li>
+                </ul>
+
+                <h3>4. Payback Period</h3>
+                <ul>
+                    <li>Time to recover initial investment</li>
+                    <li>Screening tool emphasizing liquidity</li>
+                    <li>Ignores time value (unless discounted)</li>
+                    <li>Decision: Accept if payback ≤ maximum acceptable</li>
+                </ul>
+
+                <h3>Problem-Solving Framework</h3>
+                <ol>
+                    <li><strong>Understand the Problem:</strong> What decision needs to be made?</li>
+                    <li><strong>Identify Alternatives:</strong> What are the options? Include "do nothing" if applicable</li>
+                    <li><strong>Determine Time Horizon:</strong> Study period, project lives, replacement cycles</li>
+                    <li><strong>Identify Cash Flows:</strong> Initial costs, operating costs, revenues, salvage</li>
+                    <li><strong>Draw Cash Flow Diagram:</strong> Visualize timing and magnitude</li>
+                    <li><strong>Choose Analysis Method:</strong> PW, AW, IRR, or combination</li>
+                    <li><strong>Perform Calculations:</strong> Apply formulas correctly</li>
+                    <li><strong>Make Decision:</strong> Based on economic criteria</li>
+                    <li><strong>Consider Non-Economic Factors:</strong> Risk, strategy, qualitative issues</li>
+                </ol>
+
+                <h3>Common Formulas Quick Reference</h3>
+                <div class="formula">
+                Single Payment:<br>
+                F = P(1+i)^n or P(F/P,i%,n)<br>
+                P = F(1+i)^-n or F(P/F,i%,n)<br><br>
+                
+                Uniform Series:<br>
+                F = A[((1+i)^n-1)/i] or A(F/A,i%,n)<br>
+                P = A[((1+i)^n-1)/(i(1+i)^n)] or A(P/A,i%,n)<br>
+                A = P[i(1+i)^n/((1+i)^n-1)] or P(A/P,i%,n)<br><br>
+                
+                Gradient:<br>
+                P = G[((1+i)^n-in-1)/(i^2(1+i)^n)] or G(P/G,i%,n)<br><br>
+                
+                Depreciation:<br>
+                Straight-Line: D = (B-S)/N<br>
+                CCA: CCA_t = UCC_(t-1) × d<br><br>
+                
+                After-Tax CF:<br>
+                (Revenue - Expenses)(1-T) + Depreciation(T)
+                </div>
+
+                <h3>Key Concepts to Remember</h3>
+                <ul>
+                    <li>Time value of money: dollar today > dollar tomorrow</li>
+                    <li>Economic equivalence at given interest rate</li>
+                    <li>MARR is the hurdle rate for acceptance</li>
+                    <li>Cash flows, not accounting profits</li>
+                    <li>After-tax analysis more realistic than before-tax</li>
+                    <li>Depreciation is not a cash flow but creates tax shield</li>
+                    <li>Sunk costs are irrelevant to future decisions</li>
+                    <li>Market value, not book value, for defender</li>
+                    <li>Consistent dollar basis (real or nominal) with matching rate</li>
+                </ul>
+
+                <h3>Common Mistakes to Avoid</h3>
+                <ul>
+                    <li>Using book value instead of market value for defender</li>
+                    <li>Forgetting to include salvage value</li>
+                    <li>Mixing constant and then-current dollars</li>
+                    <li>Comparing IRRs directly for mutually exclusive projects</li>
+                    <li>Using before-tax MARR with after-tax cash flows</li>
+                    <li>Treating depreciation as a cash outflow</li>
+                    <li>Including sunk costs in analysis</li>
+                    <li>Forgetting the half-year rule for CCA</li>
+                </ul>
+
+                <h3>Exam Strategies</h3>
+                <ul>
+                    <li>Read problems carefully, identify what's being asked</li>
+                    <li>Draw cash flow diagrams when helpful</li>
+                    <li>Show your work - partial credit available</li>
+                    <li>Check that your answer makes economic sense</li>
+                    <li>Manage time - don't get stuck on one problem</li>
+                    <li>Use factor tables or calculator consistently</li>
+                    <li>Label all monetary values with units</li>
+                    <li>State assumptions if problem unclear</li>
+                </ul>
+
+                <h3>Integration Example</h3>
+                <div class="example-box">
+                    <h4>Comprehensive Problem</h4>
+                    <p>Company considering equipment: Cost $100K (Class 8, 20% CCA), saves $30K/year before tax, 8-year life, salvage $15K, MARR 12% before tax, tax rate 35%, inflation 3%, working capital $10K. Should they invest?</p>
+                    <p><strong>Approach:</strong></p>
+                    <p>1. After-tax MARR = 12%(1-0.35) = 7.8%</p>
+                    <p>2. Calculate after-tax operating savings</p>
+                    <p>3. Add CCA tax shield using capital tax factors</p>
+                    <p>4. Include working capital (out at start, back at end)</p>
+                    <p>5. Account for salvage and lost tax shield</p>
+                    <p>6. Find PW or AW, compare to zero</p>
+                </div>
+
+                <h3>Final Thoughts</h3>
+                <p>Engineering economic analysis provides systematic approach to financial decision making. Master the fundamentals, practice problems, and apply sound judgment alongside quantitative methods.</p>
+            `
+        }
+    ];
+            content: `
+                <h2>Time Value of Money</h2>
+                
+                <h3>Core Concept</h3>
+                <p>Money available today is worth more than the same amount in the future due to its potential earning capacity. This is the foundation of engineering economics.</p>
+
+                <h3>Key Principles</h3>
+                <ul>
+                    <li>A dollar today can be invested to earn returns</li>
+                    <li>Inflation reduces purchasing power over time</li>
+                    <li>Risk and uncertainty affect future values</li>
+                    <li>Opportunity cost of capital must be considered</li>
+                </ul>
+
+                <h3>Present Value (PV)</h3>
+                <p>The current worth of a future sum of money or stream of cash flows given a specified rate of return.</p>
+                <div class="formula">PV = FV / (1 + i)^n<br><br>Where:<br>FV = Future Value<br>i = interest rate per period<br>n = number of periods</div>
+
+                <h3>Future Value (FV)</h3>
+                <p>The value of a current asset at a future date based on an assumed rate of growth.</p>
+                <div class="formula">FV = PV × (1 + i)^n</div>
+
+                <h3>Compound Interest</h3>
+                <p>Interest calculated on the initial principal and accumulated interest from previous periods.</p>
+                <div class="formula">A = P(1 + r/n)^(nt)<br><br>Where:<br>A = final amount<br>P = principal<br>r = annual rate<br>n = compounds per year<br>t = time in years</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>If you invest $5,000 today at 8% annual interest compounded annually, what will it be worth in 5 years?</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>FV = 5,000 × (1 + 0.08)^5 = 5,000 × 1.469 = $7,346.64</p>
+                </div>
+
+                <h3>Effective vs Nominal Interest Rates</h3>
+                <p><strong>Nominal Rate:</strong> The stated annual interest rate without considering compounding effects</p>
+                <p><strong>Effective Rate:</strong> The actual rate earned after accounting for compounding periods</p>
+                <div class="formula">Effective Rate = (1 + i/n)^n - 1<br><br>Where i = nominal rate, n = compounding periods</div>
+            `
+        },
+        {
+            number: 2,
+            title: "Cash Flow Analysis",
+            description: "Annuities, perpetuities, irregular cash flows",
+            content: `
+                <h2>Cash Flow Analysis</h2>
+                
+                <h3>Cash Flow Diagrams</h3>
+                <p>Visual representations showing the timing and magnitude of cash inflows and outflows. Time flows from left to right, with upward arrows representing inflows and downward arrows representing outflows.</p>
+
+                <h3>Annuities</h3>
+                <p>A series of equal payments or receipts occurring at regular intervals.</p>
+
+                <h3>Ordinary Annuity (End of Period)</h3>
+                <div class="formula">PV = A × [(1 - (1 + i)^-n) / i]<br><br>FV = A × [((1 + i)^n - 1) / i]<br><br>Where A = periodic payment</div>
+
+                <h3>Annuity Due (Beginning of Period)</h3>
+                <div class="formula">PV = A × [(1 - (1 + i)^-n) / i] × (1 + i)<br><br>FV = A × [((1 + i)^n - 1) / i] × (1 + i)</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>You want to save $50,000 in 10 years. If you can earn 6% annually, how much should you deposit at the end of each year?</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>50,000 = A × [((1.06)^10 - 1) / 0.06]</p>
+                    <p>50,000 = A × 13.181</p>
+                    <p>A = $3,793.65 per year</p>
+                </div>
+
+                <h3>Perpetuities</h3>
+                <p>An infinite series of equal payments at regular intervals.</p>
+                <div class="formula">PV = A / i<br><br>Where A = periodic payment, i = interest rate</div>
+
+                <h3>Deferred Annuities</h3>
+                <p>Annuities where the first payment is delayed by a specified period.</p>
+                <div class="formula">PV = [A × ((1 - (1 + i)^-n) / i)] / (1 + i)^k<br><br>Where k = deferral periods</div>
+
+                <h3>Gradient Series</h3>
+                <p><strong>Arithmetic Gradient:</strong> Cash flows that increase or decrease by a constant amount each period</p>
+                <div class="formula">PV = (G/i) × [((1 + i)^n - in - 1) / (i(1 + i)^n)]<br><br>Where G = gradient (change per period)</div>
+
+                <p><strong>Geometric Gradient:</strong> Cash flows that increase or decrease by a constant percentage each period</p>
+                <div class="formula">PV = A₁ × [(1 - (1 + g)^n(1 + i)^-n) / (i - g)]<br><br>Where g = growth rate</div>
+            `
+        },
+        {
+            number: 3,
+            title: "Minimum Attractive Rate of Return (MARR)",
+            description: "Setting hurdle rates, opportunity cost, risk considerations",
+            content: `
+                <h2>Minimum Attractive Rate of Return (MARR)</h2>
+                
+                <h3>Definition</h3>
+                <p>MARR is the minimum return on investment that a company or individual requires before undertaking a project. It serves as a hurdle rate for investment decisions.</p>
+
+                <h3>Components of MARR</h3>
+                <ul>
+                    <li><strong>Cost of Capital:</strong> The cost of obtaining funds (debt and equity)</li>
+                    <li><strong>Risk Premium:</strong> Additional return required to compensate for project risk</li>
+                    <li><strong>Opportunity Cost:</strong> Returns foregone from alternative investments</li>
+                    <li><strong>Inflation:</strong> Expected reduction in purchasing power</li>
+                </ul>
+
+                <div class="formula">MARR = Risk-Free Rate + Risk Premium + Inflation Adjustment</div>
+
+                <h3>Factors Affecting MARR</h3>
+                <ul>
+                    <li>Market conditions and competition</li>
+                    <li>Company's capital structure (debt vs equity)</li>
+                    <li>Project risk profile</li>
+                    <li>Strategic importance of the investment</li>
+                    <li>Availability of capital</li>
+                    <li>Tax considerations</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>A company can borrow at 8%, expects inflation of 3%, and requires a 5% risk premium for new projects. What should their MARR be?</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>MARR = 8% + 3% + 5% = 16%</p>
+                    <p>Any project must return at least 16% to be acceptable.</p>
+                </div>
+
+                <h3>Application in Decision Making</h3>
+                <p><strong>Accept Project:</strong> If expected return > MARR</p>
+                <p><strong>Reject Project:</strong> If expected return < MARR</p>
+                <p><strong>Indifferent:</strong> If expected return = MARR</p>
+
+                <h3>MARR vs Required Rate of Return</h3>
+                <p>While similar, MARR is typically set higher than the basic required rate to account for:</p>
+                <ul>
+                    <li>Capital rationing (limited funds)</li>
+                    <li>Management preferences</li>
+                    <li>Strategic objectives</li>
+                    <li>Screening of marginal projects</li>
+                </ul>
+
+                <h3>Adjusting MARR for Different Projects</h3>
+                <p>Companies often use different MARRs for:</p>
+                <ul>
+                    <li>Low-risk projects (replacement): Lower MARR</li>
+                    <li>Moderate-risk projects (expansion): Standard MARR</li>
+                    <li>High-risk projects (new ventures): Higher MARR</li>
+                </ul>
+            `
+        },
+        {
+            number: 4,
+            title: "Internal Rate of Return (IRR)",
+            description: "IRR calculation, multiple IRRs, comparison with MARR",
+            content: `
+                <h2>Internal Rate of Return (IRR)</h2>
+                
+                <h3>Definition</h3>
+                <p>IRR is the discount rate that makes the Net Present Value (NPV) of all cash flows equal to zero. It represents the actual return earned by a project.</p>
+
+                <div class="formula">NPV = Σ [CFₜ / (1 + IRR)^t] = 0<br><br>Where CFₜ = cash flow at time t</div>
+
+                <h3>Decision Rule</h3>
+                <ul>
+                    <li><strong>Accept:</strong> If IRR > MARR (project earns more than required)</li>
+                    <li><strong>Reject:</strong> If IRR < MARR (project earns less than required)</li>
+                    <li><strong>Indifferent:</strong> If IRR = MARR</li>
+                </ul>
+
+                <h3>Calculating IRR</h3>
+                <p>IRR typically requires trial and error or financial calculator/software:</p>
+                <ol>
+                    <li>Set NPV equation equal to zero</li>
+                    <li>Try different discount rates</li>
+                    <li>Interpolate between rates that give positive and negative NPV</li>
+                    <li>Use iteration until NPV ≈ 0</li>
+                </ol>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Initial investment: $10,000. Annual returns: $3,000 for 5 years. Find IRR.</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>-10,000 + 3,000/(1+IRR) + 3,000/(1+IRR)² + ... + 3,000/(1+IRR)⁵ = 0</p>
+                    <p>Using financial calculator or Excel: IRR ≈ 15.24%</p>
+                </div>
+
+                <h3>Multiple IRRs</h3>
+                <p>Projects with non-conventional cash flows (multiple sign changes) can have multiple IRRs.</p>
+                <p><strong>Example:</strong> -$1000, +$3000, -$2200 has two IRRs: 10% and 25%</p>
+                <p><strong>Solution:</strong> Use Modified IRR (MIRR) or NPV method instead</p>
+
+                <h3>Modified Internal Rate of Return (MIRR)</h3>
+                <p>Assumes positive cash flows are reinvested at the MARR, solving the multiple IRR problem.</p>
+                <div class="formula">MIRR = [(FV of positive flows / PV of negative flows)^(1/n)] - 1</div>
+
+                <h3>Advantages of IRR</h3>
+                <ul>
+                    <li>Easy to understand (percentage return)</li>
+                    <li>No need to specify discount rate beforehand</li>
+                    <li>Useful for comparing projects</li>
+                    <li>Considers all cash flows</li>
+                </ul>
+
+                <h3>Limitations of IRR</h3>
+                <ul>
+                    <li>Multiple IRRs with non-conventional cash flows</li>
+                    <li>May not give correct ranking for mutually exclusive projects</li>
+                    <li>Assumes reinvestment at IRR (often unrealistic)</li>
+                    <li>Cannot handle projects with different scales</li>
+                </ul>
+
+                <h3>IRR vs NPV</h3>
+                <p>When comparing projects:</p>
+                <ul>
+                    <li>For independent projects: IRR and NPV give same accept/reject decision</li>
+                    <li>For mutually exclusive projects: NPV is preferred (scale differences)</li>
+                    <li>NPV always gives correct decision when MARR is known</li>
+                </ul>
+            `
+        },
+        {
+            number: 5,
+            title: "Payback Period",
+            description: "Simple payback, discounted payback, limitations",
+            content: `
+                <h2>Payback Period</h2>
+                
+                <h3>Definition</h3>
+                <p>The time required for cumulative cash inflows to equal the initial investment. It measures how quickly an investment recovers its cost.</p>
+
+                <h3>Simple Payback Period</h3>
+                <p>For uniform annual cash flows:</p>
+                <div class="formula">Payback Period = Initial Investment / Annual Cash Flow</div>
+
+                <p>For non-uniform cash flows:</p>
+                <p>Sum cash flows year by year until cumulative total equals initial investment</p>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Initial cost: $15,000. Annual savings: Year 1: $4,000, Year 2: $5,000, Year 3: $6,000, Year 4: $7,000</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Year 1: $4,000 (cumulative: $4,000)</p>
+                    <p>Year 2: $5,000 (cumulative: $9,000)</p>
+                    <p>Year 3: $6,000 (cumulative: $15,000)</p>
+                    <p>Payback Period = 3 years</p>
+                </div>
+
+                <h3>Discounted Payback Period</h3>
+                <p>Accounts for time value of money by discounting cash flows at MARR before calculating payback.</p>
+                <div class="formula">Discounted Payback = when Σ [CFₜ / (1 + i)^t] = Initial Investment</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Same project as above, but with MARR = 10%</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Year 1: $4,000/1.10 = $3,636 (cumulative: $3,636)</p>
+                    <p>Year 2: $5,000/1.21 = $4,132 (cumulative: $7,768)</p>
+                    <p>Year 3: $6,000/1.331 = $4,508 (cumulative: $12,276)</p>
+                    <p>Year 4: $7,000/1.464 = $4,781 (cumulative: $17,057)</p>
+                    <p>Discounted Payback ≈ 3.6 years</p>
+                </div>
+
+                <h3>Decision Rule</h3>
+                <ul>
+                    <li><strong>Accept:</strong> If payback period ≤ maximum acceptable period</li>
+                    <li><strong>Reject:</strong> If payback period > maximum acceptable period</li>
+                    <li>Companies set maximum based on liquidity needs and risk tolerance</li>
+                </ul>
+
+                <h3>Advantages</h3>
+                <ul>
+                    <li>Simple and easy to understand</li>
+                    <li>Emphasizes liquidity and quick return</li>
+                    <li>Useful for companies with capital constraints</li>
+                    <li>Good screening tool for risky projects</li>
+                    <li>Reduces exposure to long-term uncertainty</li>
+                </ul>
+
+                <h3>Limitations</h3>
+                <ul>
+                    <li>Ignores cash flows after payback period</li>
+                    <li>Simple payback ignores time value of money</li>
+                    <li>No consideration of profitability</li>
+                    <li>Arbitrary cutoff period</li>
+                    <li>May reject profitable long-term projects</li>
+                    <li>Biased against projects with large late returns</li>
+                </ul>
+
+                <h3>When to Use Payback</h3>
+                <p>Best suited for:</p>
+                <ul>
+                    <li>Preliminary screening of projects</li>
+                    <li>Companies facing capital shortages</li>
+                    <li>High-risk or uncertain environments</li>
+                    <li>Industries with rapid technological change</li>
+                    <li>Supplementing other decision methods</li>
+                </ul>
+
+                <h3>Comparison with Other Methods</h3>
+                <p>Payback should be used alongside NPV or IRR, not as the sole criterion:</p>
+                <ul>
+                    <li>NPV considers all cash flows and time value</li>
+                    <li>IRR provides rate of return information</li>
+                    <li>Payback provides risk and liquidity assessment</li>
+                </ul>
+            `
+        },
+        {
+            number: 6,
+            title: "Net Present Value (NPV)",
+            description: "NPV calculation, decision rules, comparison of alternatives",
+            content: `
+                <h2>Net Present Value (NPV)</h2>
+                
+                <h3>Definition</h3>
+                <p>NPV is the difference between the present value of cash inflows and the present value of cash outflows over time. It measures the absolute profitability of an investment.</p>
+
+                <div class="formula">NPV = Σ [CFₜ / (1 + i)^t] - Initial Investment<br><br>Or:<br>NPV = -C₀ + CF₁/(1+i) + CF₂/(1+i)² + ... + CFₙ/(1+i)ⁿ<br><br>Where i = discount rate (MARR)</div>
+
+                <h3>Decision Rule</h3>
+                <ul>
+                    <li><strong>NPV > 0:</strong> Accept (project adds value)</li>
+                    <li><strong>NPV < 0:</strong> Reject (project destroys value)</li>
+                    <li><strong>NPV = 0:</strong> Indifferent (project breaks even at MARR)</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Initial cost: $20,000. Annual returns: $6,000 for 5 years. MARR = 12%</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>NPV = -20,000 + 6,000/(1.12) + 6,000/(1.12)² + 6,000/(1.12)³ + 6,000/(1.12)⁴ + 6,000/(1.12)⁵</p>
+                    <p>NPV = -20,000 + 6,000 × 3.605 = -20,000 + 21,630 = $1,630</p>
+                    <p>Since NPV > 0, accept the project.</p>
+                </div>
+
+                <h3>Comparing Mutually Exclusive Projects</h3>
+                <p>When choosing between alternatives:</p>
+                <ul>
+                    <li>Calculate NPV for each project at the same MARR</li>
+                    <li>Select the project with highest positive NPV</li>
+                    <li>If all NPVs are negative, reject all projects</li>
+                </ul>
+
+                <h3>NPV Profile</h3>
+                <p>A graph showing how NPV changes with different discount rates:</p>
+                <ul>
+                    <li>NPV decreases as discount rate increases</li>
+                    <li>Crosses x-axis at IRR (where NPV = 0)</li>
+                    <li>Useful for sensitivity analysis</li>
+                </ul>
+
+                <h3>Advantages of NPV</h3>
+                <ul>
+                    <li>Considers time value of money</li>
+                    <li>Considers all cash flows</li>
+                    <li>Direct measure of value added</li>
+                    <li>Additive (NPVs can be summed)</li>
+                    <li>Consistent with maximizing shareholder wealth</li>
+                    <li>No multiple solution problems</li>
+                </ul>
+
+                <h3>Limitations of NPV</h3>
+                <ul>
+                    <li>Requires knowledge of appropriate discount rate</li>
+                    <li>Difficult to explain to non-financial managers</li>
+                    <li>Absolute measure (harder to compare different scales)</li>
+                    <li>Sensitive to discount rate assumptions</li>
+                </ul>
+
+                <h3>NPV vs Other Methods</h3>
+                <p><strong>NPV vs IRR:</strong></p>
+                <ul>
+                    <li>NPV preferred for mutually exclusive projects</li>
+                    <li>NPV handles scale differences better</li>
+                    <li>NPV has no multiple solution issues</li>
+                </ul>
+
+                <p><strong>NPV vs Payback:</strong></p>
+                <ul>
+                    <li>NPV considers all cash flows (payback ignores post-payback)</li>
+                    <li>NPV accounts for time value (simple payback does not)</li>
+                    <li>NPV measures profitability (payback measures liquidity)</li>
+                </ul>
+
+                <h3>Sensitivity Analysis with NPV</h3>
+                <p>Test how changes in assumptions affect NPV:</p>
+                <ul>
+                    <li>Vary discount rate (MARR)</li>
+                    <li>Change cash flow estimates</li>
+                    <li>Adjust project life</li>
+                    <li>Identify critical variables</li>
+                </ul>
+            `
+        },
+        {
+            number: 7,
+            title: "Return Sensitivity Analysis",
+            description: "Scenario analysis, break-even, risk assessment",
+            content: `
+                <h2>Return Sensitivity Analysis</h2>
+                
+                <h3>Purpose</h3>
+                <p>Sensitivity analysis examines how changes in key variables affect project returns and decisions. It helps identify critical factors and assess project risk.</p>
+
+                <h3>Key Variables to Analyze</h3>
+                <ul>
+                    <li>Initial investment cost</li>
+                    <li>Operating costs</li>
+                    <li>Revenue/cash inflows</li>
+                    <li>Discount rate (MARR)</li>
+                    <li>Project life/salvage value</li>
+                    <li>Tax rates</li>
+                </ul>
+
+                <h3>One-at-a-Time Sensitivity</h3>
+                <p>Vary one parameter while holding others constant:</p>
+                <ol>
+                    <li>Calculate base case NPV or IRR</li>
+                    <li>Change one variable by percentage (e.g., ±10%, ±20%)</li>
+                    <li>Recalculate NPV or IRR</li>
+                    <li>Plot results to visualize sensitivity</li>
+                    <li>Identify most sensitive variables</li>
+                </ol>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Base case: Initial cost $50,000, annual revenue $15,000, 5 years, MARR 10%, NPV = $6,862</p>
+                    <p><strong>Sensitivity Test:</strong></p>
+                    <p>If annual revenue decreases 20% to $12,000:</p>
+                    <p>NPV = -50,000 + 12,000 × 3.791 = -50,000 + 45,492 = -$4,508</p>
+                    <p>Project becomes unacceptable with 20% revenue decrease.</p>
+                </div>
+
+                <h3>Scenario Analysis</h3>
+                <p>Evaluate multiple variables simultaneously under different scenarios:</p>
+                <ul>
+                    <li><strong>Best Case:</strong> Optimistic assumptions (low costs, high revenues)</li>
+                    <li><strong>Base Case:</strong> Most likely assumptions</li>
+                    <li><strong>Worst Case:</strong> Pessimistic assumptions (high costs, low revenues)</li>
+                </ul>
+
+                <h3>Break-Even Analysis</h3>
+                <p>Find the value of a variable where NPV = 0 or where the project just breaks even.</p>
+
+                <p><strong>Break-Even Revenue:</strong></p>
+                <div class="formula">0 = -Initial Cost + (Revenue - Costs) × PV Factor<br>Solve for Revenue</div>
+
+                <p><strong>Break-Even Volume:</strong></p>
+                <div class="formula">Break-Even Volume = Fixed Costs / (Price - Variable Cost per Unit)</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Fixed costs: $100,000/year. Variable cost: $20/unit. Selling price: $35/unit. Find break-even volume.</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Break-Even = 100,000 / (35 - 20) = 100,000 / 15 = 6,667 units</p>
+                    <p>Must sell 6,667 units to break even.</p>
+                </div>
+
+                <h3>Tornado Diagrams</h3>
+                <p>Graphical representation ranking variables by their impact on NPV:</p>
+                <ul>
+                    <li>Variables listed vertically</li>
+                    <li>Horizontal bars show NPV range for each variable</li>
+                    <li>Longest bars = most sensitive variables</li>
+                    <li>Helps prioritize risk management efforts</li>
+                </ul>
+
+                <h3>Monte Carlo Simulation</h3>
+                <p>Advanced technique using probability distributions:</p>
+                <ul>
+                    <li>Assign probability distributions to uncertain variables</li>
+                    <li>Run thousands of scenarios randomly</li>
+                    <li>Generate probability distribution of NPV or IRR</li>
+                    <li>Calculate probability of NPV < 0</li>
+                </ul>
+
+                <h3>Risk Assessment Applications</h3>
+                <ul>
+                    <li>Identify critical success factors</li>
+                    <li>Determine safe operating ranges</li>
+                    <li>Evaluate impact of estimation errors</li>
+                    <li>Support contingency planning</li>
+                    <li>Justify risk premiums in MARR</li>
+                </ul>
+
+                <h3>Decision Rules with Uncertainty</h3>
+                <ul>
+                    <li>Higher sensitivity = higher risk premium required</li>
+                    <li>Consider probability-weighted scenarios</li>
+                    <li>Maintain safety margins in critical variables</li>
+                    <li>Use conservative estimates for sensitive parameters</li>
+                </ul>
+            `
+        },
+        {
+            number: 8,
+            title: "Depreciation Methods",
+            description: "Straight-line, declining balance, units of production",
+            content: `
+                <h2>Depreciation Methods</h2>
+                
+                <h3>Purpose of Depreciation</h3>
+                <p>Depreciation allocates the cost of a tangible asset over its useful life. It affects:</p>
+                <ul>
+                    <li>Tax deductions (reduces taxable income)</li>
+                    <li>Financial reporting</li>
+                    <li>Cash flow analysis</li>
+                    <li>Asset replacement decisions</li>
+                </ul>
+
+                <h3>Key Terms</h3>
+                <ul>
+                    <li><strong>Cost Basis (B):</strong> Original cost of the asset</li>
+                    <li><strong>Salvage Value (S):</strong> Estimated value at end of useful life</li>
+                    <li><strong>Depreciable Amount:</strong> B - S</li>
+                    <li><strong>Useful Life (N):</strong> Expected years of service</li>
+                    <li><strong>Book Value:</strong> Original cost minus accumulated depreciation</li>
+                </ul>
+
+                <h3>Straight-Line Depreciation</h3>
+                <p>Equal depreciation expense each year:</p>
+                <div class="formula">Annual Depreciation = (Cost - Salvage Value) / Useful Life<br><br>D = (B - S) / N<br><br>Book Value at Year t = B - (D × t)</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Equipment cost: $100,000. Salvage: $10,000. Life: 5 years</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Annual Depreciation = (100,000 - 10,000) / 5 = $18,000/year</p>
+                    <p>Year 3 Book Value = 100,000 - (18,000 × 3) = $46,000</p>
+                </div>
+
+                <h3>Declining Balance Depreciation</h3>
+                <p>Accelerated method applying a constant rate to declining book value:</p>
+                <div class="formula">Depreciation Rate = k / N (where k = multiplier)<br><br>Dₜ = (B - Accumulated Depreciation) × Rate<br><br>Common: Double Declining Balance (DDB) where k = 2</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Same equipment, using 200% (double) declining balance:</p>
+                    <p>Rate = 2/5 = 40%</p>
+                    <p>Year 1: 100,000 × 0.40 = $40,000</p>
+                    <p>Year 2: (100,000 - 40,000) × 0.40 = $24,000</p>
+                    <p>Year 3: (60,000 - 24,000) × 0.40 = $14,400</p>
+                </div>
+
+                <h3>Units of Production Depreciation</h3>
+                <p>Based on actual usage rather than time:</p>
+                <div class="formula">Depreciation per Unit = (B - S) / Total Expected Units<br><br>Annual Depreciation = Units Produced × Depreciation per Unit</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Machine cost: $200,000. Salvage: $20,000. Expected: 500,000 units. Year 1 production: 80,000 units</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Per Unit = (200,000 - 20,000) / 500,000 = $0.36/unit</p>
+                    <p>Year 1 Depreciation = 80,000 × 0.36 = $28,800</p>
+                </div>
+
+                <h3>Sum-of-Years-Digits (SYD)</h3>
+                <p>Accelerated method with declining fractions:</p>
+                <div class="formula">SYD = N(N+1)/2<br><br>Year t Depreciation = [(N - t + 1) / SYD] × (B - S)</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Cost: $50,000. Salvage: $5,000. Life: 4 years</p>
+                    <p>SYD = 4(4+1)/2 = 10</p>
+                    <p>Year 1: (4/10) × 45,000 = $18,000</p>
+                    <p>Year 2: (3/10) × 45,000 = $13,500</p>
+                    <p>Year 3: (2/10) × 45,000 = $9,000</p>
+                    <p>Year 4: (1/10) × 45,000 = $4,500</p>
+                </div>
+
+                <h3>Comparison of Methods</h3>
+                <ul>
+                    <li><strong>Straight-Line:</strong> Simple, matches revenue evenly, most common for financial reporting</li>
+                    <li><strong>Declining Balance:</strong> Front-loads depreciation, better for assets that lose value quickly, provides early tax benefits</li>
+                    <li><strong>Units of Production:</strong> Matches usage, good for manufacturing equipment, variable annual amounts</li>
+                    <li><strong>SYD:</strong> Accelerated but smoother than declining balance</li>
+                </ul>
+
+                <h3>Tax Implications</h3>
+                <ul>
+                    <li>Accelerated methods provide larger early deductions</li>
+                    <li>Higher early depreciation = lower early taxes = better cash flow</li>
+                    <li>Time value of money makes early deductions more valuable</li>
+                    <li>Book depreciation may differ from tax depreciation</li>
+                </ul>
+            `
+        },
+        {
+            number: 9,
+            title: "Capital Cost Allowance (CCA)",
+            description: "Canadian tax depreciation system, CCA classes, half-year rule",
+            content: `
+                <h2>Capital Cost Allowance (CCA)</h2>
+                
+                <h3>Overview</h3>
+                <p>CCA is Canada's tax depreciation system. Unlike accounting depreciation, CCA is defined by the Canada Revenue Agency (CRA) and determines tax deductions for capital assets.</p>
+
+                <h3>Key Concepts</h3>
+                <ul>
+                    <li><strong>Capital Cost:</strong> The purchase price plus installation costs</li>
+                    <li><strong>Undepreciated Capital Cost (UCC):</strong> Remaining value for tax purposes</li>
+                    <li><strong>CCA Rate:</strong> Prescribed percentage per asset class</li>
+                    <li><strong>CCA Classes:</strong> Assets grouped by type and rate</li>
+                </ul>
+
+                <h3>Common CCA Classes</h3>
+                <ul>
+                    <li><strong>Class 1 (4%):</strong> Buildings acquired after 1987</li>
+                    <li><strong>Class 8 (20%):</strong> Furniture, appliances, tools over $500</li>
+                    <li><strong>Class 10 (30%):</strong> Vehicles, computer hardware</li>
+                    <li><strong>Class 12 (100%):</strong> Tools under $500, software</li>
+                    <li><strong>Class 43 (30%):</strong> Manufacturing equipment</li>
+                    <li><strong>Class 50 (55%):</strong> Computer equipment acquired after 2015</li>
+                </ul>
+
+                <h3>Declining Balance Method</h3>
+                <p>CCA uses declining balance for most classes:</p>
+                <div class="formula">CCA Deduction = UCC × CCA Rate<br><br>New UCC = Previous UCC - CCA Deduction + Additions - Disposals</div>
+
+                <h3>Half-Year Rule</h3>
+                <p>In the year of acquisition, only 50% of net additions can be depreciated:</p>
+                <div class="formula">First Year CCA = (Acquisitions - Disposals) × CCA Rate × 0.5</div>
+
+                <div class="example-box">
+                    <h4>Example Problem</h4>
+                    <p>Purchase equipment for $100,000 (Class 8, 20% rate)</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>Year 1: CCA = 100,000 × 0.20 × 0.5 = $10,000</p>
+                    <p>UCC End Year 1 = 100,000 - 10,000 = $90,000</p>
+                    <p>Year 2: CCA = 90,000 × 0.20 = $18,000</p>
+                    <p>UCC End Year 2 = 90,000 - 18,000 = $72,000</p>
+                </div>
+
+                <h3>Accelerated Investment Incentive (AII)</h3>
+                <p>Temporary measure (for assets acquired 2018-2027) allowing enhanced first-year deduction:</p>
+                <ul>
+                    <li>Effectively 1.5 times normal first-year CCA</li>
+                    <li>No half-year rule for immediate expensing classes</li>
+                    <li>Phases out gradually after 2023</li>
+                </ul>
+
+                <div class="formula">Enhanced First Year = UCC × Rate × 1.5</div>
+
+                <h3>Disposal of Assets</h3>
+                <p><strong>If proceeds < UCC:</strong> Continue claiming CCA on remaining UCC</p>
+                <p><strong>If proceeds > UCC but < original cost:</strong> Recapture of CCA (taxable income)</p>
+                <p><strong>If proceeds > original cost:</strong> Capital gain (50% taxable) plus recapture</p>
+
+                <div class="example-box">
+                    <h4>Example: Recapture</h4>
+                    <p>UCC of class: $30,000. Sell asset for $45,000 (original cost $50,000)</p>
+                    <p><strong>Solution:</strong></p>
+                    <p>UCC after disposal = 30,000 - 45,000 = -$15,000</p>
+                    <p>Recapture = $15,000 (added to income)</p>
+                    <p>No capital gain (sold below original cost)</p>
+                </div>
+
+                <h3>Terminal Loss</h3>
+                <p>When all assets in a class are disposed of and UCC > proceeds:</p>
+                <div class="formula">Terminal Loss = Remaining UCC (deductible from income)</div>
+
+                <h3>CCA and Cash Flow Analysis</h3>
+                <p>CCA provides tax shield (reduces taxes, increases after-tax cash flow):</p>
+                <div class="formula">Tax Shield = CCA × Tax Rate<br><br>After-tax Cash Flow Impact = CCA × Tax Rate</div>
+
+                <h3>Present Value of CCA Tax Shield</h3>
+                <p>For an asset acquired at cost C with CCA rate d and tax rate T:</p>
+                <div class="formula">PV of Tax Shield = (C × d × T) / (d + i) × [(1 + 0.5i) / (1 + i)]<br><br>Where i = discount rate</div>
+
+                <h3>Strategic Considerations</h3>
+                <ul>
+                    <li>Timing of purchases (year-end vs start of year)</li>
+                    <li>Maximizing CCA claims in high-income years</li>
+                    <li>Impact of different asset classes on cash flows</li>
+                    <li>Disposition planning to minimize recapture</li>
+                </ul>
+            `
+        },
+        {
+            number: 10,
+            title: "Project Costing Methods",
+            description: "Cost estimation, direct vs indirect costs, overhead allocation",
+            content: `
+                <h2>Project Costing Methods</h2>
+                
+                <h3>Cost Classifications</h3>
+                
+                <h3>Direct Costs</h3>
+                <p>Costs directly traceable to a specific project or product:</p>
+                <ul>
+                    <li><strong>Direct Materials:</strong> Raw materials, components</li>
+                    <li><strong>Direct Labor:</strong> Wages of workers directly involved</li>
+                    <li><strong>Direct Expenses:</strong> Equipment rental, subcontractors</li>
+                </ul>
+
+                <h3>Indirect Costs (Overhead)</h3>
+                <p>Costs not directly traceable but necessary for operations:</p>
+                <ul>
+                    <li><strong>Manufacturing Overhead:</strong> Factory rent, utilities, supervision</li>
+                    <li><strong>Administrative Overhead:</strong> Office costs, management salaries</li>
+                    <li><strong>Selling & Distribution:</strong> Marketing, shipping, sales staff</li>
+                </ul>
+
+                <h3>Fixed vs Variable Costs</h3>
+                <p><strong>Fixed Costs:</strong> Don't change with production volume (rent, insurance, salaries)</p>
+                <p><strong>Variable Costs:</strong> Change proportionally with volume (materials, direct labor, utilities)</p>
+                <div class="formula">Total Cost = Fixed Costs + (Variable Cost per Unit × Volume)</div>
+
+                <h3>Cost Estimation Methods</h3>
+
+                <h3>1. Analogous Estimating (Top-Down)</h3>
+                <ul>
+                    <li>Based on similar past projects</li>
+                    <li>Quick but less accurate</li>
+                    <li>Useful for early project phases</li>
+                    <li>Requires good historical data</li>
+                </ul>
+
+                <h3>2. Parametric Estimating</h3>
+                <ul>
+                    <li>Uses statistical relationships and variables</li>
+                    <li>Cost per unit × number of units</li>
+                    <li>Examples: cost per square meter, cost per line of code</li>
+                </ul>
+
+                <div class="example-box">
+                    <h4>Example: Parametric</h4>
+                    <p>Building costs $1,500/m². Estimate for 2,000 m² facility:</p>
+                    <p>Cost = 1,500 × 2,000 = $3,000,000</p>
+                </div>
+
+                <h3>3. Bottom-Up Estimating</h3>
+                <ul>
+                    <li>Detailed estimate of each component</li>
+                    <li>Most accurate but time-consuming</li>
+                    <li>Sum individual work package costs</li>
+                    <li>Requires detailed project breakdown</li>
+                </ul>
+
+                <h3>4. Three-Point Estimating</h3>
+                <div class="formula">Expected Cost = (Optimistic + 4×Most Likely + Pessimistic) / 6</div>
+
+                <div class="example-box">
+                    <h4>Example: Three-Point</h4>
+                    <p>Optimistic: $80,000. Most Likely: $100,000. Pessimistic: $140,000</p>
+                    <p>Expected = (80,000 + 4×100,000 + 140,000) / 6 = $103,333</p>
+                </div>
+
+                <h3>Overhead Allocation Methods</h3>
+
+                <h3>1. Direct Labor Hours</h3>
+                <div class="formula">Overhead Rate = Total Overhead / Total Direct Labor Hours<br><br>Project Overhead = Project Labor Hours × Overhead Rate</div>
+
+                <h3>2. Direct Labor Cost</h3>
+                <div class="formula">Overhead Rate = Total Overhead / Total Direct Labor Cost<br><br>Project Overhead = Project Labor Cost × Overhead Rate</div>
+
+                <h3>3. Machine Hours</h3>
+                <div class="formula">Overhead Rate = Total Overhead / Total Machine Hours<br><br>Best for automated/equipment-intensive operations</div>
+
+                <div class="example-box">
+                    <h4>Example: Overhead Allocation</h4>
+                    <p>Total overhead: $500,000. Total direct labor hours: 25,000</p>
+                    <p>Overhead rate = 500,000 / 25,000 = $20/hour</p>
+                    <p>Project uses 1,200 hours → Overhead = 1,200 × 20 = $24,000</p>
+                </div>
+
+                <h3>Activity-Based Costing (ABC)</h3>
+                <p>More accurate method allocating overhead based on activities:</p>
+                <ol>
+                    <li>Identify activities (setup, quality control, ordering)</li>
+                    <li>Assign costs to each activity pool</li>
+                    <li>Determine cost drivers for each activity</li>
+                    <li>Calculate activity rates</li>
+                    <li>Assign costs to projects based on activity usage</li>
+                </ol>
+
+                <h3>Cost-Plus Pricing</h3>
+                <div class="formula">Selling Price = Total Cost + (Total Cost × Markup %)<br><br>Or:<br>Selling Price = Total Cost + Desired Profit</div>
+
+                <div class="example-box">
+                    <h4>Example: Cost-Plus</h4>
+                    <p>Direct costs: $50,000. Overhead: $30,000. Desired markup: 20%</p>
+                    <p>Total Cost = 50,000 + 30,000 = $80,000</p>
+                    <p>Price = 80,000 + (80,000 × 0.20) = $96,000</p>
+                </div>
+
+                <h3>Target Costing</h3>
+                <p>Market-driven approach:</p>
+                <div class="formula">Target Cost = Expected Selling Price - Desired Profit Margin</div>
+                <p>Design and engineer product to meet target cost</p>
+
+                <h3>Life Cycle Costing</h3>
+                <p>Consider all costs over asset's entire life:</p>
+                <ul>
+                    <li>Initial acquisition and installation</li>
+                    <li>Operating and maintenance costs</li>
+                    <li>Energy and consumables</li>
+                    <li>Disposal or salvage</li>
+                </ul>
+
+                <h3>Cost Control and Monitoring</h3>
+                <ul>
+                    <li>Establish baseline budgets</li>
+                    <li>Track actual vs budgeted costs</li>
+                    <li>Calculate cost variance</li>
+                    <li>Implement corrective actions</li>
+                    <li>Use earned value management</li>
+                </ul>
+            `
+        }
+    ];
+
+    const quizQuestions = [
+        {
+            topic: 1,
+            question: "In engineering economics, which type of cost should NOT be considered in future decisions?",
+            options: [
+                "Opportunity costs",
+                "Sunk costs",
+                "Variable costs",
+                "Fixed costs"
+            ],
+            correct: 1,
+            explanation: "Sunk costs are past costs that cannot be recovered and should not influence future decisions. Only future costs and benefits matter for decision making."
+        },
+        {
+            topic: 1,
+            question: "On a cash flow diagram, what do downward arrows represent?",
+            options: [
+                "Cash inflows or receipts",
+                "Cash outflows or expenditures",
+                "Time periods",
+                "Interest rates"
+            ],
+            correct: 1,
+            explanation: "Downward arrows represent cash outflows (expenditures), while upward arrows represent cash inflows (receipts). The horizontal axis represents time."
+        },
+        {
+            topic: 2,
+            question: "If you invest $8,000 today at 7% annual interest compounded annually, what will it be worth in 4 years?",
+            options: [
+                "$10,240",
+                "$10,485",
+                "$11,200",
+                "$9,600"
+            ],
+            correct: 1,
+            explanation: "F = P(1 + i)^n = 8,000 × (1.07)^4 = 8,000 × 1.3108 = $10,486"
+        },
+        {
+            topic: 2,
+            question: "A bank offers 6% annual interest compounded monthly. What is the effective annual rate?",
+            options: [
+                "6.00%",
+                "6.17%",
+                "6.50%",
+                "7.20%"
+            ],
+            correct: 1,
+            explanation: "Effective rate = (1 + r/m)^m - 1 = (1 + 0.06/12)^12 - 1 = (1.005)^12 - 1 = 0.0617 = 6.17%"
+        },
+        {
+            topic: 2,
+            question: "Two cash flow patterns are economically equivalent when:",
+            options: [
+                "They have the same total undiscounted value",
+                "They have the same value when discounted to the same point in time at the same rate",
+                "They occur over the same time period",
+                "They have equal annual amounts"
+            ],
+            correct: 1,
+            explanation: "Economic equivalence means cash flows have the same present or future value when discounted at the same interest rate to the same time point."
+        },
+        {
+            topic: 3,
+            question: "You need to accumulate $75,000 in 12 years. If you can earn 8% annually, how much should you deposit at the end of each year?",
+            options: [
+                "$3,950",
+                "$4,125",
+                "$4,250",
+                "$6,250"
+            ],
+            correct: 0,
+            explanation: "A = F(A/F, 8%, 12) = 75,000 × [0.08/(1.08^12 - 1)] = 75,000 × 0.0527 = $3,950"
+        },
+        {
+            topic: 3,
+            question: "A bond pays $60 interest each year for 8 years and returns $1,000 at maturity. If the market rate is 7%, what is the bond's present value?",
+            options: [
+                "$948",
+                "$1,000",
+                "$1,052",
+                "$1,480"
+            ],
+            correct: 0,
+            explanation: "P = 60(P/A, 7%, 8) + 1,000(P/F, 7%, 8) = 60(5.971) + 1,000(0.5820) = 358 + 582 = $940 (approximately $948)"
+        },
+        {
+            topic: 3,
+            question: "In an arithmetic gradient series, cash flows:",
+            options: [
+                "Stay constant each period",
+                "Increase or decrease by a constant amount each period",
+                "Increase by a constant percentage each period",
+                "Occur irregularly"
+            ],
+            correct: 1,
+            explanation: "Arithmetic gradient means cash flows change by a constant amount (G) each period, like $100, $150, $200, $250..."
+        },
+        {
+            topic: 4,
+            question: "Machine costs $45,000, saves $12,000 annually for 6 years, salvage $4,000, MARR 10%. What is the present worth?",
+            options: [
+                "$5,650",
+                "$7,275",
+                "$9,520",
+                "$12,000"
+            ],
+            correct: 1,
+            explanation: "PW = -45,000 + 12,000(P/A,10%,6) + 4,000(P/F,10%,6) = -45,000 + 12,000(4.355) + 4,000(0.5645) = -45,000 + 52,260 + 2,258 = $9,518"
+        },
+        {
+            topic: 4,
+            question: "Annual Worth analysis is particularly useful when:",
+            options: [
+                "Projects have equal lives",
+                "Projects have different useful lives",
+                "Only one alternative exists",
+                "Interest rates are unknown"
+            ],
+            correct: 1,
+            explanation: "AW method automatically accounts for different project lives by converting to equivalent annual amounts, eliminating need for least common multiple."
+        },
+        {
+            topic: 4,
+            question: "For independent projects evaluated using present worth, you should:",
+            options: [
+                "Accept only the highest PW project",
+                "Accept all projects with PW greater than zero",
+                "Accept projects in order of PW until budget exhausted",
+                "Reject all projects with positive PW"
+            ],
+            correct: 1,
+            explanation: "Independent projects don't compete. Accept all with PW ≥ 0 (subject to budget constraints), as each adds value independently."
+        },
+        {
+            topic: 4,
+            question: "The main limitation of simple payback period is that it:",
+            options: [
+                "Is too difficult to calculate",
+                "Ignores cash flows after the payback period",
+                "Requires knowledge of MARR",
+                "Cannot be used for equipment"
+            ],
+            correct: 1,
+            explanation: "Payback ignores all cash flows after payback is reached, potentially rejecting highly profitable long-term projects. It also ignores time value unless discounted payback is used."
+        },
+        {
+            topic: 5,
+            question: "For mutually exclusive projects, you should NOT:",
+            options: [
+                "Use incremental analysis with IRR",
+                "Compare IRRs directly and choose the highest",
+                "Use present worth analysis",
+                "Consider project scale differences"
+            ],
+            correct: 1,
+            explanation: "Cannot compare IRRs directly for mutually exclusive projects. Must use incremental analysis or PW method because projects may have different scales."
+        },
+        {
+            topic: 5,
+            question: "A project costs $25,000 and returns $7,500 annually for 5 years. The IRR is approximately:",
+            options: [
+                "12%",
+                "15%",
+                "18%",
+                "20%"
+            ],
+            correct: 2,
+            explanation: "0 = -25,000 + 7,500(P/A, i%, 5). Solving: (P/A, i%, 5) = 3.333. From tables or calculator, IRR ≈ 18%"
+        },
+        {
+            topic: 5,
+            question: "Multiple IRRs can occur when:",
+            options: [
+                "The project lasts more than 10 years",
+                "Cash flows change sign more than once",
+                "The initial investment is very large",
+                "MARR is higher than 20%"
+            ],
+            correct: 1,
+            explanation: "Projects with non-conventional cash flows (multiple sign changes) can have multiple IRRs. Use Modified IRR or PW method to resolve this."
+        },
+        {
+            topic: 5,
+            question: "External Rate of Return (ERR) assumes positive cash flows are reinvested at:",
+            options: [
+                "The project's IRR",
+                "The MARR",
+                "Zero percent",
+                "The risk-free rate"
+            ],
+            correct: 1,
+            explanation: "ERR (or MIRR) assumes reinvestment at MARR rather than IRR, which is more realistic and solves the multiple IRR problem."
+        },
+        {
+            topic: 6,
+            question: "In replacement analysis, the defender is:",
+            options: [
+                "The new equipment being considered",
+                "The currently owned equipment",
+                "The equipment with lowest cost",
+                "Always the better choice"
+            ],
+            correct: 1,
+            explanation: "The defender is the currently owned asset being considered for replacement. The challenger is the potential replacement asset."
+        },
+        {
+            topic: 6,
+            question: "When analyzing a defender, you should use its:",
+            options: [
+                "Original purchase price",
+                "Book value",
+                "Current market value",
+                "Replacement cost"
+            ],
+            correct: 2,
+            explanation: "Use current market value for the defender. Original cost and book value are sunk costs and irrelevant to replacement decisions."
+        },
+        {
+            topic: 6,
+            question: "Economic Service Life (ESL) is the period that:",
+            options: [
+                "Maximizes the asset's useful life",
+                "Minimizes the equivalent annual cost",
+                "Equals the depreciation period",
+                "Matches the manufacturer's warranty"
+            ],
+            correct: 1,
+            explanation: "ESL is the ownership period that minimizes equivalent annual cost, balancing declining capital recovery cost against increasing operating costs."
+        },
+        {
+            topic: 7,
+            question: "Equipment costs $60,000, salvage $6,000, life 9 years. Annual straight-line depreciation is:",
+            options: [
+                "$6,000",
+                "$6,667",
+                "$7,500",
+                "$8,000"
+            ],
+            correct: 0,
+            explanation: "D = (B - S) / N = (60,000 - 6,000) / 9 = 54,000 / 9 = $6,000 per year"
+        },
+        {
+            topic: 7,
+            question: "Under the CCA half-year rule, if you purchase $50,000 of Class 8 equipment (20% rate), first year CCA is:",
+            options: [
+                "$5,000",
+                "$7,500",
+                "$10,000",
+                "$12,500"
+            ],
+            correct: 0,
+            explanation: "First Year CCA = Cost × Rate × 0.5 = 50,000 × 0.20 × 0.5 = $5,000"
+        },
+        {
+            topic: 7,
+            question: "CCA Class 10 (30% rate) typically includes:",
+            options: [
+                "Buildings",
+                "Vehicles and computer hardware",
+                "Tools under $500",
+                "Furniture"
+            ],
+            correct: 1,
+            explanation: "Class 10 at 30% declining balance includes vehicles, automotive equipment, and some computer hardware."
+        },
+        {
+            topic: 7,
+            question: "Depreciation creates a tax benefit because it:",
+            options: [
+                "Is a cash inflow",
+                "Reduces taxable income, lowering taxes paid",
+                "Increases revenue",
+                "Eliminates the need for taxes"
+            ],
+            correct: 1,
+            explanation: "Depreciation is a non-cash expense that reduces taxable income. Tax Shield = Depreciation × Tax Rate, which increases after-tax cash flow."
+        },
+        {
+            topic: 7,
+            question: "Recapture of CCA occurs when:",
+            options: [
+                "You claim too much depreciation",
+                "Disposal proceeds exceed the UCC of the asset class",
+                "You forget to claim CCA",
+                "The asset is fully depreciated"
+            ],
+            correct: 1,
+            explanation: "Recapture occurs when proceeds from disposal exceed the UCC, requiring you to add the excess back to taxable income."
+        },
+        {
+            topic: 8,
+            question: "Revenue is $150,000, expenses $60,000, depreciation $25,000, tax rate 30%. What is the after-tax cash flow?",
+            options: [
+                "$45,500",
+                "$52,500",
+                "$70,500",
+                "$90,000"
+            ],
+            correct: 2,
+            explanation: "Taxable Income = 150K - 60K - 25K = 65K. Tax = 65K × 0.30 = 19.5K. After-tax CF = 150K - 60K - 19.5K = 70.5K (or use formula: (150K-60K)(1-0.30) + 25K(0.30) = 70.5K)"
+        },
+        {
+            topic: 8,
+            question: "Working capital in a project:",
+            options: [
+                "Is depreciated over the project life",
+                "Is recovered at project end",
+                "Provides a tax shield",
+                "Is never considered in analysis"
+            ],
+            correct: 1,
+            explanation: "Working capital is required at project start (outflow) and recovered at end (inflow). It's not depreciable and has no tax effects."
+        },
+        {
+            topic: 8,
+            question: "If the before-tax MARR is 15% and the tax rate is 35%, the after-tax MARR is:",
+            options: [
+                "9.75%",
+                "10.50%",
+                "15.00%",
+                "20.25%"
+            ],
+            correct: 0,
+            explanation: "After-tax MARR = Before-tax MARR × (1 - Tax Rate) = 15% × (1 - 0.35) = 15% × 0.65 = 9.75%"
+        },
+        {
+            topic: 8,
+            question: "In a loan payment, which portion is tax deductible?",
+            options: [
+                "The principal portion",
+                "The interest portion",
+                "Both principal and interest",
+                "Neither portion"
+            ],
+            correct: 1,
+            explanation: "Only the interest portion of loan payments is tax deductible. Principal repayment is not deductible but reduces the loan balance."
+        },
+        {
+            topic: 9,
+            question: "A cost is $20,000 in constant dollars. With 4% inflation, what is the then-current dollar amount in year 6?",
+            options: [
+                "$24,800",
+                "$25,306",
+                "$26,000",
+                "$28,800"
+            ],
+            correct: 1,
+            explanation: "Then-Current = Constant × (1 + f)^n = 20,000 × (1.04)^6 = 20,000 × 1.265 = $25,306"
+        },
+        {
+            topic: 9,
+            question: "The nominal interest rate is 12% and inflation is 5%. The real interest rate is approximately:",
+            options: [
+                "6.67%",
+                "7.00%",
+                "17.00%",
+                "2.40%"
+            ],
+            correct: 0,
+            explanation: "Real rate = (1 + nominal)/(1 + inflation) - 1 = (1.12/1.05) - 1 = 1.0667 - 1 = 0.0667 = 6.67%. Approximation: 12% - 5% = 7%"
+        },
+        {
+            topic: 9,
+            question: "In economic analysis with inflation, which approach is INCORRECT?",
+            options: [
+                "Then-current dollars with nominal rate",
+                "Constant dollars with real rate",
+                "Then-current dollars with real rate",
+                "Either approach if consistently applied"
+            ],
+            correct: 2,
+            explanation: "Never mix then-current dollars with real rates or constant dollars with nominal rates. Both must be consistent: either both inflated or both deflated."
+        },
+        {
+            topic: 9,
+            question: "Which statement about inflation effects is TRUE?",
+            options: [
+                "All costs inflate at the same rate",
+                "CCA tax shields are based on historical costs, not inflated values",
+                "Inflation has no effect on after-tax analysis",
+                "Constant dollar analysis always gives different results than then-current"
+            ],
+            correct: 1,
+            explanation: "CCA is based on original (historical) cost, so the tax shield erodes in real terms with inflation. Different costs can inflate at different rates."
+        },
+        {
+            topic: 10,
+            question: "When comparing mutually exclusive projects with different lives, the best method is:",
+            options: [
+                "Simple payback period",
+                "Annual Worth analysis",
+                "Comparing total revenues",
+                "Shortest life always wins"
+            ],
+            correct: 1,
+            explanation: "Annual Worth automatically handles different project lives by converting to equivalent annual amounts, making direct comparison easy."
+        },
+        {
+            topic: 10,
+            question: "Which is NOT one of the four main economic evaluation methods?",
+            options: [
+                "Present Worth",
+                "Annual Worth",
+                "Book Value",
+                "Internal Rate of Return"
+            ],
+            correct: 2,
+            explanation: "The four main methods are Present Worth (PW), Annual Worth (AW), Internal Rate of Return (IRR), and Payback Period. Book value is an accounting concept."
+        },
+        {
+            topic: 1,
+            question: "Opportunity cost represents:",
+            options: [
+                "The cost of materials",
+                "The benefit foregone by choosing one alternative over another",
+                "Depreciation expense",
+                "Interest payments"
+            ],
+            correct: 1,
+            explanation: "Opportunity cost is the value of the best alternative foregone when making a decision. It represents what you give up by choosing one option."
+        },
+        {
+            topic: 2,
+            question: "What is the present value of $12,000 to be received 7 years from now at 9% interest?",
+            options: [
+                "$6,560",
+                "$7,200",
+                "$8,100",
+                "$10,800"
+            ],
+            correct: 0,
+            explanation: "P = F(P/F, 9%, 7) = 12,000 × (1.09)^-7 = 12,000 × 0.5470 = $6,564"
+        },
+        {
+            topic: 3,
+            question: "Which formula finds the present value of a uniform series?",
+            options: [
+                "(F/A, i%, n)",
+                "(P/A, i%, n)",
+                "(A/P, i%, n)",
+                "(P/F, i%, n)"
+            ],
+            correct: 1,
+            explanation: "(P/A, i%, n) converts a uniform annual series to present value: P = A[(1+i)^n - 1]/[i(1+i)^n]"
+        },
+        {
+            topic: 4,
+            question: "MARR (Minimum Attractive Rate of Return) typically includes:",
+            options: [
+                "Only the cost of borrowing",
+                "Cost of capital, risk premium, and opportunity cost",
+                "Just the inflation rate",
+                "Only the company's profit margin"
+            ],
+            correct: 1,
+            explanation: "MARR includes cost of capital, risk premium for project uncertainty, and opportunity cost of alternative investments. It sets the minimum acceptable return."
+        },
+        {
+            topic: 5,
+            question: "For an investment to be acceptable using IRR, the internal rate of return must be:",
+            options: [
+                "Less than MARR",
+                "Equal to the inflation rate",
+                "Greater than or equal to MARR",
+                "Exactly zero"
+            ],
+            correct: 2,
+            explanation: "Accept project if IRR ≥ MARR. The project must earn at least the minimum required return to be worthwhile."
+        },
+        {
+            topic: 6,
+            question: "Physical impairment of equipment refers to:",
+            options: [
+                "Increased maintenance and reduced performance",
+                "Changes in tax laws",
+                "Market price fluctuations",
+                "Insurance costs"
+            ],
+            correct: 0,
+            explanation: "Physical impairment means the asset is deteriorating, requiring more maintenance and delivering reduced performance, making replacement consideration necessary."
+        },
+        {
+            topic: 7,
+            question: "Book value of an asset is:",
+            options: [
+                "Its market selling price",
+                "Original cost minus accumulated depreciation",
+                "Its replacement cost",
+                "Its salvage value"
+            ],
+            correct: 1,
+            explanation: "Book Value = Original Cost - Accumulated Depreciation. This is an accounting value that may differ from market value."
+        },
+        {
+            topic: 8,
+            question: "Capital tax factors calculate the:",
+            options: [
+                "Present value of CCA tax shield",
+                "Future cost of equipment",
+                "Payback period",
+                "IRR of a project"
+            ],
+            correct: 0,
+            explanation: "Capital tax factors compute the PV of the CCA tax shield: (C×d×T)/(d+i) × [(1+0.5i)/(1+i)], simplifying after-tax analysis."
+        },
+        {
+            topic: 9,
+            question: "Constant dollars represent:",
+            options: [
+                "Amounts adjusted to base-year purchasing power",
+                "Actual nominal amounts at transaction time",
+                "Only cash transactions",
+                "Foreign currency amounts"
+            ],
+            correct: 0,
+            explanation: "Constant (real) dollars are adjusted for inflation to represent base-year purchasing power, unlike then-current (nominal) dollars."
+        },
+        {
+            topic: 10,
+            question: "Which statement about Present Worth analysis is FALSE?",
+            options: [
+                "Converts all cash flows to time zero",
+                "Requires definition of study period",
+                "Cannot handle unequal project lives",
+                "Is reliable for mutually exclusive projects"
+            ],
+            correct: 2,
+            explanation: "PW can handle unequal lives using least common multiple or study period approach. It's false that it cannot handle them."
+        },
+        {
+            topic: 3,
+            question: "A geometric gradient series has cash flows that:",
+            options: [
+                "Stay constant",
+                "Increase by a constant dollar amount",
+                "Increase by a constant percentage",
+                "Decrease linearly"
+            ],
+            correct: 2,
+            explanation: "Geometric gradient means cash flows change by a constant percentage each period, like growing 5% annually."
+        },
+        {
+            topic: 5,
+            question: "Incremental analysis in IRR compares:",
+            options: [
+                "Each project to do-nothing",
+                "The difference in cash flows between alternatives",
+                "Only initial costs",
+                "Operating costs only"
+            ],
+            correct: 1,
+            explanation: "Incremental analysis calculates IRR on the difference in cash flows between alternatives to determine if the extra investment is justified."
+        },
+        {
+            topic: 6,
+            question: "When both defender and challenger are identical types:",
+            options: [
+                "Always keep the defender",
+                "Always replace with challenger",
+                "Compare using economic service life",
+                "Use book value for comparison"
+            ],
+            correct: 2,
+            explanation: "When identical, compare economic service lives. Replace when defender's annual cost exceeds challenger's minimum annual cost."
+        },
+        {
+            topic: 7,
+            question: "UCC (Undepreciated Capital Cost) represents:",
+            options: [
+                "The market value of an asset",
+                "The remaining value for CCA purposes",
+                "The salvage value",
+                "Future replacement cost"
+            ],
+            correct: 1,
+            explanation: "UCC is the balance remaining in an asset class for CCA (tax depreciation) purposes after accounting for depreciation claimed."
+        },
+        {
+            topic: 8,
+            question: "A lease payment of $5,000 with a 40% tax rate has an after-tax cost of:",
+            options: [
+                "$2,000",
+                "$3,000",
+                "$5,000",
+                "$7,000"
+            ],
+            correct: 1,
+            explanation: "After-tax lease cost = Lease payment × (1 - Tax rate) = 5,000 × (1 - 0.40) = 5,000 × 0.60 = $3,000"
+        },
+        {
+            topic: 9,
+            question: "If labor costs increase at 6% annually while general inflation is 3%, labor costs are:",
+            options: [
+                "Decreasing in real terms",
+                "Increasing faster than general inflation",
+                "Staying constant",
+                "Deflating"
+            ],
+            correct: 1,
+            explanation: "Labor costs rising at 6% while inflation is 3% means labor is increasing 3% faster than general prices, growing in real terms."
+        }
+    ];
+            options: [
+                "$10,600",
+                "$11,800",
+                "$11,910",
+                "$12,400"
+            ],
+            correct: 2,
+            explanation: "FV = PV × (1 + i)^n = 10,000 × (1.06)^3 = 10,000 × 1.191 = $11,910"
+        },
+        {
+            topic: 1,
+            question: "What is the present value of $5,000 to be received 4 years from now if the discount rate is 8%?",
+            options: [
+                "$3,675",
+                "$4,000",
+                "$3,969",
+                "$3,500"
+            ],
+            correct: 0,
+            explanation: "PV = FV / (1 + i)^n = 5,000 / (1.08)^4 = 5,000 / 1.360 = $3,675"
+        },
+        {
+            topic: 1,
+            question: "Which rate accounts for the effect of compounding periods within a year?",
+            options: [
+                "Nominal rate",
+                "Effective rate",
+                "Real rate",
+                "Prime rate"
+            ],
+            correct: 1,
+            explanation: "The effective rate accounts for compounding effects within the year. It's calculated as (1 + i/n)^n - 1, where n is the number of compounding periods."
+        },
+        {
+            topic: 2,
+            question: "You need to make payments of $1,000 at the end of each year for 5 years. If the interest rate is 7%, what is the present value?",
+            options: [
+                "$4,100",
+                "$4,500",
+                "$4,100",
+                "$5,000"
+            ],
+            correct: 0,
+            explanation: "PV = A × [(1 - (1 + i)^-n) / i] = 1,000 × [(1 - 1.07^-5) / 0.07] = 1,000 × 4.100 = $4,100"
+        },
+        {
+            topic: 2,
+            question: "What is a perpetuity?",
+            options: [
+                "A payment that lasts exactly 100 years",
+                "An infinite series of equal payments at regular intervals",
+                "A payment that grows indefinitely",
+                "A one-time lump sum payment"
+            ],
+            correct: 1,
+            explanation: "A perpetuity is an infinite series of equal payments made at regular intervals. Its present value is calculated as PV = A / i."
+        },
+        {
+            topic: 2,
+            question: "In an ordinary annuity, payments are made:",
+            options: [
+                "At the beginning of each period",
+                "At the end of each period",
+                "At random intervals",
+                "Only once"
+            ],
+            correct: 1,
+            explanation: "In an ordinary annuity, payments are made at the end of each period. In an annuity due, payments are made at the beginning."
+        },
+        {
+            topic: 3,
+            question: "MARR represents:",
+            options: [
+                "Maximum allowable rate of return",
+                "Minimum attractive rate of return",
+                "Minimum average rate ratio",
+                "Market average return rate"
+            ],
+            correct: 1,
+            explanation: "MARR is the Minimum Attractive Rate of Return - the minimum return required before undertaking a project. It serves as a hurdle rate for investment decisions."
+        },
+        {
+            topic: 3,
+            question: "Which of the following is NOT a component of MARR?",
+            options: [
+                "Cost of capital",
+                "Risk premium",
+                "Sunk costs",
+                "Opportunity cost"
+            ],
+            correct: 2,
+            explanation: "Sunk costs are past costs that cannot be recovered and should not influence future decisions. MARR includes cost of capital, risk premium, opportunity cost, and inflation."
+        },
+        {
+            topic: 3,
+            question: "If a project's expected return is 18% and the MARR is 15%, the project should be:",
+            options: [
+                "Rejected",
+                "Accepted",
+                "Reconsidered",
+                "Deferred"
+            ],
+            correct: 1,
+            explanation: "Accept projects when expected return > MARR. Since 18% > 15%, the project exceeds the minimum requirement and should be accepted."
+        },
+        {
+            topic: 4,
+            question: "IRR is the discount rate that makes:",
+            options: [
+                "Future value equal to zero",
+                "Net present value equal to zero",
+                "Cash flows equal",
+                "Payback period minimum"
+            ],
+            correct: 1,
+            explanation: "IRR (Internal Rate of Return) is defined as the discount rate where NPV = 0. It represents the actual return earned by the project."
+        },
+        {
+            topic: 4,
+            question: "A project with initial cost $20,000 and annual returns of $6,000 for 5 years has an IRR of approximately:",
+            options: [
+                "12%",
+                "15%",
+                "18%",
+                "21%"
+            ],
+            correct: 1,
+            explanation: "Using financial calculator or trial and error: -20,000 + 6,000×(PV factor) = 0. The IRR is approximately 15.24%."
+        },
+        {
+            topic: 4,
+            question: "Multiple IRRs can occur when:",
+            options: [
+                "The project is too long",
+                "Cash flows change sign more than once",
+                "The discount rate is too high",
+                "Initial investment is very large"
+            ],
+            correct: 1,
+            explanation: "Projects with non-conventional cash flows (multiple sign changes) can have multiple IRRs. This is solved by using MIRR or NPV method."
+        },
+        {
+            topic: 4,
+            question: "If IRR > MARR, you should:",
+            options: [
+                "Reject the project",
+                "Accept the project",
+                "Calculate NPV first",
+                "Recalculate IRR"
+            ],
+            correct: 1,
+            explanation: "When IRR exceeds MARR, the project earns more than the required return and should be accepted."
+        },
+        {
+            topic: 5,
+            question: "Simple payback period ignores:",
+            options: [
+                "Initial investment",
+                "Annual cash flows",
+                "Time value of money",
+                "Project duration"
+            ],
+            correct: 2,
+            explanation: "Simple payback period does not consider time value of money - it treats all dollars equally regardless of when they occur. Discounted payback fixes this."
+        },
+        {
+            topic: 5,
+            question: "A project costs $30,000 and generates $10,000 annually. The simple payback period is:",
+            options: [
+                "2 years",
+                "3 years",
+                "4 years",
+                "5 years"
+            ],
+            correct: 1,
+            explanation: "Payback Period = Initial Investment / Annual Cash Flow = 30,000 / 10,000 = 3 years"
+        },
+        {
+            topic: 5,
+            question: "Which is a major limitation of the payback method?",
+            options: [
+                "It's too complex to calculate",
+                "It ignores cash flows after the payback period",
+                "It requires knowing the MARR",
+                "It can't be used for equipment purchases"
+            ],
+            correct: 1,
+            explanation: "Payback method ignores all cash flows that occur after the payback period is reached, potentially rejecting highly profitable long-term projects."
+        },
+        {
+            topic: 5,
+            question: "Discounted payback period will always be:",
+            options: [
+                "Shorter than simple payback",
+                "Equal to simple payback",
+                "Longer than simple payback",
+                "Exactly double simple payback"
+            ],
+            correct: 2,
+            explanation: "Discounted payback is always longer because discounting reduces the present value of future cash flows, requiring more time to recover the initial investment."
+        },
+        {
+            topic: 6,
+            question: "If NPV is positive, it means the project:",
+            options: [
+                "Will lose money",
+                "Breaks even",
+                "Adds value and should be accepted",
+                "Should be rejected"
+            ],
+            correct: 2,
+            explanation: "Positive NPV means the present value of inflows exceeds outflows, creating value. Accept all projects with NPV > 0 (at appropriate MARR)."
+        },
+        {
+            topic: 6,
+            question: "Project costs $50,000, returns $15,000/year for 5 years, MARR = 10%. The NPV is approximately:",
+            options: [
+                "$6,850",
+                "$10,000",
+                "$56,850",
+                "$25,000"
+            ],
+            correct: 2,
+            explanation: "NPV = -50,000 + 15,000×(PV factor at 10%, 5 years) = -50,000 + 15,000×3.791 = -50,000 + 56,865 = $6,865"
+        },
+        {
+            topic: 6,
+            question: "When comparing mutually exclusive projects, select the one with:",
+            options: [
+                "Shortest payback period",
+                "Highest IRR",
+                "Highest positive NPV",
+                "Lowest initial cost"
+            ],
+            correct: 2,
+            explanation: "For mutually exclusive projects, choose the one with highest positive NPV. NPV is preferred over IRR for comparing different-sized projects."
+        },
+        {
+            topic: 6,
+            question: "As the discount rate increases, NPV:",
+            options: [
+                "Increases",
+                "Decreases",
+                "Stays the same",
+                "Becomes zero"
+            ],
+            correct: 1,
+            explanation: "Higher discount rates reduce present values of future cash flows, causing NPV to decrease. The NPV curve slopes downward."
+        },
+        {
+            topic: 7,
+            question: "Sensitivity analysis examines:",
+            options: [
+                "How changes in key variables affect project returns",
+                "The sensitivity of equipment",
+                "Employee morale",
+                "Market competition only"
+            ],
+            correct: 0,
+            explanation: "Sensitivity analysis tests how changes in assumptions (costs, revenues, rates) impact project outcomes like NPV or IRR."
+        },
+        {
+            topic: 7,
+            question: "Break-even analysis finds the point where:",
+            options: [
+                "Revenue equals total costs",
+                "IRR equals MARR",
+                "Payback period is minimized",
+                "All projects are equal"
+            ],
+            correct: 0,
+            explanation: "Break-even is where total revenue equals total costs (or NPV = 0), meaning the project neither makes nor loses money."
+        },
+        {
+            topic: 7,
+            question: "In scenario analysis, which case uses pessimistic assumptions?",
+            options: [
+                "Best case",
+                "Base case",
+                "Worst case",
+                "Expected case"
+            ],
+            correct: 2,
+            explanation: "Worst case scenario uses pessimistic assumptions (high costs, low revenues) to test downside risk. Best case uses optimistic assumptions."
+        },
+        {
+            topic: 7,
+            question: "Fixed costs are $80,000, variable cost is $15/unit, price is $30/unit. Break-even volume is:",
+            options: [
+                "2,667 units",
+                "5,333 units",
+                "8,000 units",
+                "4,000 units"
+            ],
+            correct: 1,
+            explanation: "Break-even = Fixed Costs / (Price - Variable Cost) = 80,000 / (30 - 15) = 80,000 / 15 = 5,333 units"
+        },
+        {
+            topic: 8,
+            question: "Straight-line depreciation allocates cost:",
+            options: [
+                "Evenly over useful life",
+                "More in early years",
+                "Based on usage",
+                "Randomly"
+            ],
+            correct: 0,
+            explanation: "Straight-line depreciation spreads the depreciable amount (Cost - Salvage) evenly over the asset's useful life: D = (B - S) / N"
+        },
+        {
+            topic: 8,
+            question: "Equipment costs $80,000, salvage $8,000, life 6 years. Annual straight-line depreciation is:",
+            options: [
+                "$12,000",
+                "$13,333",
+                "$14,000",
+                "$10,000"
+            ],
+            correct: 0,
+            explanation: "Annual Depreciation = (80,000 - 8,000) / 6 = 72,000 / 6 = $12,000 per year"
+        },
+        {
+            topic: 8,
+            question: "Declining balance depreciation is considered:",
+            options: [
+                "A straight-line method",
+                "An accelerated method",
+                "A units-based method",
+                "Not accepted for tax purposes"
+            ],
+            correct: 1,
+            explanation: "Declining balance is an accelerated method that front-loads depreciation, providing larger deductions in early years and smaller ones later."
+        },
+        {
+            topic: 8,
+            question: "Units of production depreciation is best for:",
+            options: [
+                "Buildings",
+                "Office furniture",
+                "Manufacturing equipment with measurable output",
+                "Land"
+            ],
+            correct: 2,
+            explanation: "Units of production links depreciation to actual usage/output, making it ideal for manufacturing equipment where units produced can be measured."
+        },
+        {
+            topic: 9,
+            question: "CCA stands for:",
+            options: [
+                "Canadian Cost Assessment",
+                "Capital Cost Allowance",
+                "Company Capital Account",
+                "Corporate Cost Allocation"
+            ],
+            correct: 1,
+            explanation: "CCA (Capital Cost Allowance) is Canada's tax depreciation system, defined by the Canada Revenue Agency."
+        },
+        {
+            topic: 9,
+            question: "The half-year rule means:",
+            options: [
+                "Assets last half as long",
+                "Only 50% of net additions can be depreciated in year of acquisition",
+                "CCA rates are cut in half",
+                "You pay half the taxes"
+            ],
+            correct: 1,
+            explanation: "Under the half-year rule, only 50% of net additions to a CCA class can be depreciated in the acquisition year. First year CCA = Additions × Rate × 0.5"
+        },
+        {
+            topic: 9,
+            question: "Class 10 assets (30% CCA rate) typically include:",
+            options: [
+                "Buildings",
+                "Vehicles and computer hardware",
+                "Land",
+                "Tools under $500"
+            ],
+            correct: 1,
+            explanation: "Class 10 (30% declining balance) includes vehicles, automotive equipment, and some computer hardware."
+        },
+        {
+            topic: 9,
+            question: "Recapture of CCA occurs when:",
+            options: [
+                "You buy too many assets",
+                "Disposal proceeds exceed UCC of the class",
+                "CCA rate increases",
+                "You don't claim CCA"
+            ],
+            correct: 1,
+            explanation: "Recapture occurs when proceeds from disposal exceed the UCC of the class, requiring you to add the excess back to taxable income."
+        },
+        {
+            topic: 10,
+            question: "Direct costs are:",
+            options: [
+                "Costs that can be traced directly to a specific project",
+                "Overhead costs only",
+                "Fixed costs only",
+                "Administrative costs"
+            ],
+            correct: 0,
+            explanation: "Direct costs (materials, labor, equipment) can be directly traced to a specific project or product, unlike indirect costs (overhead)."
+        },
+        {
+            topic: 10,
+            question: "Which is an example of indirect costs?",
+            options: [
+                "Raw materials for a product",
+                "Factory supervisor's salary",
+                "Subcontractor fees",
+                "Direct labor wages"
+            ],
+            correct: 1,
+            explanation: "Factory supervisor's salary is an indirect cost (overhead) because it can't be traced to a single project. It benefits multiple projects."
+        },
+        {
+            topic: 10,
+            question: "Variable costs:",
+            options: [
+                "Never change",
+                "Change with production volume",
+                "Are always indirect",
+                "Only include materials"
+            ],
+            correct: 1,
+            explanation: "Variable costs change proportionally with production volume (e.g., materials, direct labor, utilities). Fixed costs remain constant regardless of volume."
+        },
+        {
+            topic: 10,
+            question: "Overhead rate is $25/labor hour. A project uses 500 labor hours. Allocated overhead is:",
+            options: [
+                "$10,000",
+                "$12,500",
+                "$15,000",
+                "$20,000"
+            ],
+            correct: 1,
+            explanation: "Allocated Overhead = Overhead Rate × Labor Hours = $25 × 500 = $12,500"
+        },
+        {
+            topic: 10,
+            question: "Activity-Based Costing (ABC):",
+            options: [
+                "Only considers direct costs",
+                "Allocates overhead based on activities rather than single driver",
+                "Is simpler than traditional costing",
+                "Ignores indirect costs"
+            ],
+            correct: 1,
+            explanation: "ABC allocates overhead based on multiple activities and their cost drivers, providing more accurate cost allocation than traditional single-driver methods."
+        },
+        {
+            topic: 1,
+            question: "The time value of money principle states that:",
+            options: [
+                "Money loses value over time due to inflation only",
+                "Money available today is worth more than the same amount in the future",
+                "Future money is always worth more than present money",
+                "Time and money are unrelated"
+            ],
+            correct: 1,
+            explanation: "Money today is worth more because it can be invested to earn returns, and also due to inflation and opportunity cost."
+        },
+        {
+            topic: 2,
+            question: "What type of cash flow series involves equal payments at regular intervals?",
+            options: [
+                "Gradient series",
+                "Perpetuity only",
+                "Annuity",
+                "Lump sum"
+            ],
+            correct: 2,
+            explanation: "An annuity is a series of equal payments made at regular intervals (monthly, annually, etc.)."
+        },
+        {
+            topic: 3,
+            question: "A company's MARR should generally be:",
+            options: [
+                "Lower than its cost of capital",
+                "Equal to the risk-free rate",
+                "Higher than its cost of capital to account for risk and opportunity cost",
+                "Set at 5% for all projects"
+            ],
+            correct: 2,
+            explanation: "MARR should exceed cost of capital to account for risk, opportunity cost, and to screen marginal projects."
+        },
+        {
+            topic: 4,
+            question: "When comparing two mutually exclusive projects, if their NPV profiles cross:",
+            options: [
+                "Always choose the higher IRR project",
+                "The preferred project depends on the actual MARR",
+                "Reject both projects",
+                "They are equivalent"
+            ],
+            correct: 1,
+            explanation: "When NPV profiles cross, the preferred project depends on which side of the crossover point the MARR falls. Use NPV at actual MARR to decide."
+        },
+        {
+            topic: 5,
+            question: "Payback period is most useful as a measure of:",
+            options: [
+                "Profitability",
+                "Risk and liquidity",
+                "Long-term value",
+                "Tax benefits"
+            ],
+            correct: 1,
+            explanation: "Payback period primarily measures risk (how quickly investment is recovered) and liquidity, not profitability or long-term value."
+        },
+        {
+            topic: 6,
+            question: "The NPV profile crosses the x-axis at:",
+            options: [
+                "The MARR",
+                "The payback period",
+                "The IRR",
+                "Zero discount rate"
+            ],
+            correct: 2,
+            explanation: "The NPV profile crosses zero (x-axis) at the IRR, which is defined as the rate where NPV = 0."
+        },
+        {
+            topic: 7,
+            question: "A tornado diagram in sensitivity analysis:",
+            options: [
+                "Shows weather patterns",
+                "Ranks variables by their impact on NPV",
+                "Only applies to construction projects",
+                "Calculates exact probabilities"
+            ],
+            correct: 1,
+            explanation: "Tornado diagrams rank variables by their impact on NPV, with longest bars (most sensitive variables) at the top, creating a tornado shape."
+        },
+        {
+            topic: 8,
+            question: "Accelerated depreciation methods provide:",
+            options: [
+                "Equal deductions each year",
+                "Larger deductions in early years",
+                "Smaller deductions in early years",
+                "No tax benefits"
+            ],
+            correct: 1,
+            explanation: "Accelerated methods (declining balance, SYD) provide larger depreciation deductions in early years, offering better tax benefits due to time value of money."
+        },
+        {
+            topic: 9,
+            question: "UCC stands for:",
+            options: [
+                "Universal Cost Code",
+                "Undepreciated Capital Cost",
+                "Unit Cost Calculation",
+                "Uniform Canadian Code"
+            ],
+            correct: 1,
+            explanation: "UCC (Undepreciated Capital Cost) is the remaining value of an asset for CCA purposes after accumulated depreciation."
+        },
+        {
+            topic: 10,
+            question: "In cost-plus pricing, if total cost is $100,000 and markup is 25%, the price is:",
+            options: [
+                "$100,000",
+                "$125,000",
+                "$75,000",
+                "$150,000"
+            ],
+            correct: 1,
+            explanation: "Price = Cost + (Cost × Markup%) = 100,000 + (100,000 × 0.25) = 100,000 + 25,000 = $125,000"
+        }
+    ];
+
+    let currentTopic = null;
+    let currentQuizMode = null;
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let quizAnswers = [];
+    let currentQuestions = [];
+
+    function initializeApp() {
+        renderTopics();
+        renderCalculators();
+    }
+
+    function renderTopics() {
+        const grid = document.getElementById('topic-grid');
+        grid.innerHTML = topics.map(topic => `
+            <div class="topic-card" onclick="openTopic(${topic.number})">
+                <div class="topic-number">Topic ${topic.number}</div>
+                <div class="topic-title">${topic.title}</div>
+                <div class="topic-description">${topic.description}</div>
+            </div>
+        `).join('');
+    }
+
+    function renderCalculators() {
+        const container = document.getElementById('calculator-section');
+        container.innerHTML = `
+            <div class="calc-card">
+                <h3>Present Value Calculator</h3>
+                <div class="input-group">
+                    <label>Future Value ($)</label>
+                    <input type="number" id="pv-fv" placeholder="e.g., 10000">
+                </div>
+                <div class="input-group">
+                    <label>Interest Rate (%)</label>
+                    <input type="number" id="pv-rate" placeholder="e.g., 8" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Number of Periods</label>
+                    <input type="number" id="pv-n" placeholder="e.g., 5">
+                </div>
+                <button class="btn btn-primary" onclick="calculatePV()">Calculate</button>
+                <div id="pv-result" class="calc-result" style="display: none;"></div>
+            </div>
+
+            <div class="calc-card">
+                <h3>Future Value Calculator</h3>
+                <div class="input-group">
+                    <label>Present Value ($)</label>
+                    <input type="number" id="fv-pv" placeholder="e.g., 5000">
+                </div>
+                <div class="input-group">
+                    <label>Interest Rate (%)</label>
+                    <input type="number" id="fv-rate" placeholder="e.g., 6" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Number of Periods</label>
+                    <input type="number" id="fv-n" placeholder="e.g., 10">
+                </div>
+                <button class="btn btn-primary" onclick="calculateFV()">Calculate</button>
+                <div id="fv-result" class="calc-result" style="display: none;"></div>
+            </div>
+
+            <div class="calc-card">
+                <h3>Annuity Present Value</h3>
+                <div class="input-group">
+                    <label>Annual Payment ($)</label>
+                    <input type="number" id="apv-pmt" placeholder="e.g., 1000">
+                </div>
+                <div class="input-group">
+                    <label>Interest Rate (%)</label>
+                    <input type="number" id="apv-rate" placeholder="e.g., 7" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Number of Periods</label>
+                    <input type="number" id="apv-n" placeholder="e.g., 5">
+                </div>
+                <button class="btn btn-primary" onclick="calculateAnnuityPV()">Calculate</button>
+                <div id="apv-result" class="calc-result" style="display: none;"></div>
+            </div>
+
+            <div class="calc-card">
+                <h3>NPV Calculator</h3>
+                <div class="input-group">
+                    <label>Initial Investment ($)</label>
+                    <input type="number" id="npv-initial" placeholder="e.g., 50000">
+                </div>
+                <div class="input-group">
+                    <label>Annual Cash Flow ($)</label>
+                    <input type="number" id="npv-cf" placeholder="e.g., 15000">
+                </div>
+                <div class="input-group">
+                    <label>Number of Years</label>
+                    <input type="number" id="npv-n" placeholder="e.g., 5">
+                </div>
+                <div class="input-group">
+                    <label>Discount Rate / MARR (%)</label>
+                    <input type="number" id="npv-rate" placeholder="e.g., 12" step="0.1">
+                </div>
+                <button class="btn btn-primary" onclick="calculateNPV()">Calculate</button>
+                <div id="npv-result" class="calc-result" style="display: none;"></div>
+            </div>
+
+            <div class="calc-card">
+                <h3>Payback Period Calculator</h3>
+                <div class="input-group">
+                    <label>Initial Investment ($)</label>
+                    <input type="number" id="pb-initial" placeholder="e.g., 30000">
+                </div>
+                <div class="input-group">
+                    <label>Annual Cash Flow ($)</label>
+                    <input type="number" id="pb-cf" placeholder="e.g., 10000">
+                </div>
+                <button class="btn btn-primary" onclick="calculatePayback()">Calculate</button>
+                <div id="pb-result" class="calc-result" style="display: none;"></div>
+            </div>
+
+            <div class="calc-card">
+                <h3>Straight-Line Depreciation</h3>
+                <div class="input-group">
+                    <label>Asset Cost ($)</label>
+                    <input type="number" id="sl-cost" placeholder="e.g., 100000">
+                </div>
+                <div class="input-group">
+                    <label>Salvage Value ($)</label>
+                    <input type="number" id="sl-salvage" placeholder="e.g., 10000">
+                </div>
+                <div class="input-group">
+                    <label>Useful Life (years)</label>
+                    <input type="number" id="sl-life" placeholder="e.g., 5">
+                </div>
+                <button class="btn btn-primary" onclick="calculateStraightLine()">Calculate</button>
+                <div id="sl-result" class="calc-result" style="display: none;"></div>
+            </div>
+        `;
+    }
+
+    function calculatePV() {
+        const fv = parseFloat(document.getElementById('pv-fv').value);
+        const rate = parseFloat(document.getElementById('pv-rate').value) / 100;
+        const n = parseFloat(document.getElementById('pv-n').value);
+        
+        if (isNaN(fv) || isNaN(rate) || isNaN(n)) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        const pv = fv / Math.pow(1 + rate, n);
+        const result = document.getElementById('pv-result');
+        result.style.display = 'block';
+        result.innerHTML = `
+            <strong>Present Value: $${pv.toFixed(2)}</strong><br>
+            Formula: PV = FV / (1 + i)^n<br>
+            Calculation: ${fv.toFixed(2)} / (1 + ${rate.toFixed(4)})^${n} = $${pv.toFixed(2)}
+        `;
+    }
+
+    function calculateFV() {
+        const pv = parseFloat(document.getElementById('fv-pv').value);
+        const rate = parseFloat(document.getElementById('fv-rate').value) / 100;
+        const n = parseFloat(document.getElementById('fv-n').value);
+        
+        if (isNaN(pv) || isNaN(rate) || isNaN(n)) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        const fv = pv * Math.pow(1 + rate, n);
+        const result = document.getElementById('fv-result');
+        result.style.display = 'block';
+        result.innerHTML = `
+            <strong>Future Value: $${fv.toFixed(2)}</strong><br>
+            Formula: FV = PV × (1 + i)^n<br>
+            Calculation: ${pv.toFixed(2)} × (1 + ${rate.toFixed(4)})^${n} = $${fv.toFixed(2)}
+        `;
+    }
+
+    function calculateAnnuityPV() {
+        const pmt = parseFloat(document.getElementById('apv-pmt').value);
+        const rate = parseFloat(document.getElementById('apv-rate').value) / 100;
+        const n = parseFloat(document.getElementById('apv-n').value);
+        
+        if (isNaN(pmt) || isNaN(rate) || isNaN(n)) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        const pv = pmt * ((1 - Math.pow(1 + rate, -n)) / rate);
+        const result = document.getElementById('apv-result');
+        result.style.display = 'block';
+        result.innerHTML = `
+            <strong>Present Value: $${pv.toFixed(2)}</strong><br>
+            Formula: PV = A × [(1 - (1 + i)^-n) / i]<br>
+            This is the lump sum equivalent of ${n} payments of $${pmt.toFixed(2)}
+        `;
+    }
+
+    function calculateNPV() {
+        const initial = parseFloat(document.getElementById('npv-initial').value);
+        const cf = parseFloat(document.getElementById('npv-cf').value);
+        const n = parseFloat(document.getElementById('npv-n').value);
+        const rate = parseFloat(document.getElementById('npv-rate').value) / 100;
+        
+        if (isNaN(initial) || isNaN(cf) || isNaN(n) || isNaN(rate)) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        const pvFactor = (1 - Math.pow(1 + rate, -n)) / rate;
+        const pvInflows = cf * pvFactor;
+        const npv = -initial + pvInflows;
+        
+        const result = document.getElementById('npv-result');
+        result.style.display = 'block';
+        
+        let decision = '';
+        if (npv > 0) {
+            decision = '<strong style="color: #4CAF50;">Accept - Project adds value</strong>';
+        } else if (npv < 0) {
+            decision = '<strong style="color: #F44336;">Reject - Project destroys value</strong>';
+        } else {
+            decision = '<strong>Indifferent - Project breaks even</strong>';
+        }
+        
+        result.innerHTML = `
+            <strong>Net Present Value: $${npv.toFixed(2)}</strong><br>
+            ${decision}<br><br>
+            PV of Inflows: $${pvInflows.toFixed(2)}<br>
+            Initial Investment: $${initial.toFixed(2)}<br>
+            NPV = ${pvInflows.toFixed(2)} - ${initial.toFixed(2)} = $${npv.toFixed(2)}
+        `;
+    }
+
+    function calculatePayback() {
+        const initial = parseFloat(document.getElementById('pb-initial').value);
+        const cf = parseFloat(document.getElementById('pb-cf').value);
+        
+        if (isNaN(initial) || isNaN(cf)) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        const payback = initial / cf;
+        const result = document.getElementById('pb-result');
+        result.style.display = 'block';
+        result.innerHTML = `
+            <strong>Payback Period: ${payback.toFixed(2)} years</strong><br>
+            Formula: Payback = Initial Investment / Annual Cash Flow<br>
+            Calculation: ${initial.toFixed(2)} / ${cf.toFixed(2)} = ${payback.toFixed(2)} years<br><br>
+            Note: This is simple payback and does not account for time value of money.
+        `;
+    }
+
+    function calculateStraightLine() {
+        const cost = parseFloat(document.getElementById('sl-cost').value);
+        const salvage = parseFloat(document.getElementById('sl-salvage').value);
+        const life = parseFloat(document.getElementById('sl-life').value);
+        
+        if (isNaN(cost) || isNaN(salvage) || isNaN(life)) {
+            alert('Please fill in all fields');
+            return;
+        }
+        
+        const annual = (cost - salvage) / life;
+        const result = document.getElementById('sl-result');
+        result.style.display = 'block';
+        result.innerHTML = `
+            <strong>Annual Depreciation: $${annual.toFixed(2)}</strong><br>
+            Formula: D = (Cost - Salvage) / Life<br>
+            Calculation: (${cost.toFixed(2)} - ${salvage.toFixed(2)}) / ${life} = $${annual.toFixed(2)}<br><br>
+            Depreciable Amount: $${(cost - salvage).toFixed(2)}<br>
+            This amount is deducted equally each year for ${life} years.
+        `;
+    }
+
+    function switchTab(tab) {
+        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+        document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+        
+        event.target.classList.add('active');
+        document.getElementById(`${tab}-section`).classList.add('active');
+
+        if (tab === 'quiz') {
+            document.getElementById('quiz-container').innerHTML = '';
+        }
+        if (tab === 'comprehensive') {
+            document.getElementById('comprehensive-quiz-container').innerHTML = '';
+        }
+    }
+
+    function openTopic(topicNum) {
+        const topic = topics.find(t => t.number === topicNum);
+        const modal = document.getElementById('modal');
+        const modalBody = document.getElementById('modal-body');
+        
+        modalBody.innerHTML = `<div class="content">${topic.content}</div>`;
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+        document.getElementById('modal').classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+
+    function startQuiz(mode) {
+        currentQuizMode = mode;
+        
+        if (mode === 'targeted') {
+            showTopicSelection();
+        } else {
+            currentQuestions = shuffleArray([...quizQuestions]).slice(0, 15);
+            currentQuestionIndex = 0;
+            score = 0;
+            quizAnswers = [];
+            renderQuiz();
+        }
+    }
+
+    function showTopicSelection() {
+        const container = document.getElementById('quiz-container');
+        container.innerHTML = `
+            <div class="quiz-header">
+                <h2>Select a Topic</h2>
+                <p>Choose which topic you want to practice</p>
+            </div>
+            <div class="topic-grid">
+                ${topics.map(topic => `
+                    <div class="topic-card" onclick="startTopicQuiz(${topic.number})">
+                        <div class="topic-number">Topic ${topic.number}</div>
+                        <div class="topic-title">${topic.title}</div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    function startTopicQuiz(topicNum) {
+        const topicQuestions = quizQuestions.filter(q => q.topic === topicNum);
+        currentQuestions = shuffleArray(topicQuestions);
+        currentQuestionIndex = 0;
+        score = 0;
+        quizAnswers = [];
+        renderQuiz();
+    }
+
+    function startComprehensiveTest() {
+        const container = document.getElementById('comprehensive-quiz-container');
+        currentQuestions = shuffleArray([...quizQuestions]).slice(0, 30);
+        currentQuestionIndex = 0;
+        score = 0;
+        quizAnswers = [];
+        renderComprehensiveQuiz();
+    }
+
+    function renderQuiz() {
+        const container = document.getElementById('quiz-container');
+        const question = currentQuestions[currentQuestionIndex];
+        const progress = ((currentQuestionIndex) / currentQuestions.length) * 100;
+
+        container.innerHTML = `
+            <div class="quiz-header">
+                <h2>Question ${currentQuestionIndex + 1} of ${currentQuestions.length}</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progress}%"></div>
+                </div>
+            </div>
+            <div class="question-card">
+                <div class="question-text">${question.question}</div>
+                <div class="options">
+                    ${question.options.map((option, index) => `
+                        <div class="option" onclick="selectOption(${index})" id="option-${index}">
+                            ${option}
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="feedback"></div>
+            </div>
+            <div class="quiz-controls">
+                <button class="btn" onclick="previousQuestion()" ${currentQuestionIndex === 0 ? 'disabled' : ''}>Previous</button>
+                <button class="btn btn-primary" onclick="checkAnswer()" id="check-btn" disabled>Check Answer</button>
+            </div>
+        `;
+    }
+
+    function renderComprehensiveQuiz() {
+        const container = document.getElementById('comprehensive-quiz-container');
+        const question = currentQuestions[currentQuestionIndex];
+        const progress = ((currentQuestionIndex) / currentQuestions.length) * 100;
+
+        container.innerHTML = `
+            <div class="quiz-header">
+                <h2>Question ${currentQuestionIndex + 1} of ${currentQuestions.length}</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progress}%"></div>
+                </div>
+            </div>
+            <div class="question-card">
+                <div class="question-text">${question.question}</div>
+                <div class="options">
+                    ${question.options.map((option, index) => `
+                        <div class="option" onclick="selectOption(${index})" id="option-${index}">
+                            ${option}
+                        </div>
+                    `).join('')}
+                </div>
+                <div id="feedback"></div>
+            </div>
+            <div class="quiz-controls">
+                <button class="btn" onclick="previousQuestion()" ${currentQuestionIndex === 0 ? 'disabled' : ''}>Previous</button>
+                <button class="btn btn-primary" onclick="checkAnswer()" id="check-btn" disabled>Check Answer</button>
+            </div>
+        `;
+    }
+
+    let selectedAnswer = null;
+
+    function selectOption(index) {
+        if (quizAnswers[currentQuestionIndex] !== undefined) return;
+        
+        document.querySelectorAll('.option').forEach(opt => opt.classList.remove('selected'));
+        document.getElementById(`option-${index}`).classList.add('selected');
+        selectedAnswer = index;
+        document.getElementById('check-btn').disabled = false;
+    }
+
+    function checkAnswer() {
+        const question = currentQuestions[currentQuestionIndex];
+        const isCorrect = selectedAnswer === question.correct;
+        
+        quizAnswers[currentQuestionIndex] = {
+            selected: selectedAnswer,
+            correct: question.correct,
+            isCorrect: isCorrect
+        };
+
+        if (isCorrect) score++;
+
+        document.querySelectorAll('.option').forEach((opt, idx) => {
+            opt.classList.add('disabled');
+            if (idx === question.correct) {
+                opt.classList.add('correct');
+            } else if (idx === selectedAnswer) {
+                opt.classList.add('incorrect');
+            }
+        });
+
+        const feedback = document.getElementById('feedback');
+        feedback.className = `feedback ${isCorrect ? 'correct' : 'incorrect'}`;
+        feedback.innerHTML = `
+            <strong>${isCorrect ? 'Correct!' : 'Incorrect'}</strong><br>
+            ${question.explanation}
+        `;
+
+        const checkBtn = document.getElementById('check-btn');
+        checkBtn.textContent = currentQuestionIndex === currentQuestions.length - 1 ? 'View Results' : 'Next Question';
+        checkBtn.onclick = nextQuestion;
+        checkBtn.disabled = false;
+    }
+
+    function nextQuestion() {
+        if (currentQuestionIndex === currentQuestions.length - 1) {
+            showResults();
+        } else {
+            currentQuestionIndex++;
+            selectedAnswer = null;
+            if (document.getElementById('comprehensive-quiz-container').innerHTML) {
+                renderComprehensiveQuiz();
+            } else {
+                renderQuiz();
+            }
+        }
+    }
+
+    function previousQuestion() {
+        if (currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            selectedAnswer = quizAnswers[currentQuestionIndex]?.selected;
+            if (document.getElementById('comprehensive-quiz-container').innerHTML) {
+                renderComprehensiveQuiz();
+            } else {
+                renderQuiz();
+            }
+            
+            if (quizAnswers[currentQuestionIndex]) {
+                const question = currentQuestions[currentQuestionIndex];
+                const answer = quizAnswers[currentQuestionIndex];
+                
+                setTimeout(() => {
+                    document.getElementById(`option-${answer.selected}`).classList.add('selected');
+                    document.querySelectorAll('.option').forEach((opt, idx) => {
+                        opt.classList.add('disabled');
+                        if (idx === question.correct) {
+                            opt.classList.add('correct');
+                        } else if (idx === answer.selected) {
+                            opt.classList.add('incorrect');
+                        }
+                    });
+
+                    const feedback = document.getElementById('feedback');
+                    feedback.className = `feedback ${answer.isCorrect ? 'correct' : 'incorrect'}`;
+                    feedback.innerHTML = `
+                        <strong>${answer.isCorrect ? 'Correct!' : 'Incorrect'}</strong><br>
+                        ${question.explanation}
+                    `;
+
+                    const checkBtn = document.getElementById('check-btn');
+                    checkBtn.textContent = currentQuestionIndex === currentQuestions.length - 1 ? 'View Results' : 'Next Question';
+                    checkBtn.onclick = nextQuestion;
+                }, 50);
+            }
+        }
+    }
+
+    function showResults() {
+        const percentage = Math.round((score / currentQuestions.length) * 100);
+        let message = '';
+        
+        if (percentage >= 90) {
+            message = 'Outstanding! You have excellent mastery of engineering economics.';
+        } else if (percentage >= 80) {
+            message = 'Great job! You have a strong understanding of the concepts.';
+        } else if (percentage >= 70) {
+            message = 'Good work! Review the areas where you struggled.';
+        } else if (percentage >= 60) {
+            message = 'You are making progress. Keep studying the material.';
+        } else {
+            message = 'Keep working! Focus on understanding the core formulas and concepts.';
+        }
+
+        const topicBreakdown = {};
+        currentQuestions.forEach((q, idx) => {
+            if (!topicBreakdown[q.topic]) {
+                topicBreakdown[q.topic] = { correct: 0, total: 0 };
+            }
+            topicBreakdown[q.topic].total++;
+            if (quizAnswers[idx]?.isCorrect) {
+                topicBreakdown[q.topic].correct++;
+            }
+        });
+
+        const container = document.getElementById('comprehensive-quiz-container').innerHTML ? 
+            document.getElementById('comprehensive-quiz-container') : 
+            document.getElementById('quiz-container');
+
+        container.innerHTML = `
+            <div class="results-screen">
+                <h2>Quiz Complete</h2>
+                <div class="score-display">${percentage}%</div>
+                <p class="performance-message">${message}</p>
+                <p>You scored ${score} out of ${currentQuestions.length} questions</p>
+                
+                <div class="results-breakdown">
+                    <h3 style="margin-bottom: 1rem;">Performance by Topic</h3>
+                    ${Object.entries(topicBreakdown).map(([topicNum, data]) => {
+                        const topicInfo = topics.find(t => t.number === parseInt(topicNum));
+                        const topicPercentage = Math.round((data.correct / data.total) * 100);
+                        return `
+                            <div class="topic-score">
+                                <span>${topicInfo.title}</span>
+                                <span>${data.correct}/${data.total} (${topicPercentage}%)</span>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+
+                <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem; flex-wrap: wrap;">
+                    <button class="btn btn-primary" onclick="retakeQuiz()">Retake Quiz</button>
+                    <button class="btn" onclick="switchTab('study')">Review Material</button>
+                </div>
+            </div>
+        `;
+    }
+
+    function retakeQuiz() {
+        if (document.getElementById('comprehensive-quiz-container').innerHTML) {
+            startComprehensiveTest();
+        } else if (currentQuizMode === 'targeted') {
+            showTopicSelection();
+        } else {
+            startQuiz('random');
+        }
+    }
+
+    function shuffleArray(array) {
+        const newArray = [...array];
+        for (let i = newArray.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+        }
+        return newArray;
+    }
+
+    document.addEventListener('DOMContentLoaded', initializeApp);
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
+```
+
+</body>
+</html>
